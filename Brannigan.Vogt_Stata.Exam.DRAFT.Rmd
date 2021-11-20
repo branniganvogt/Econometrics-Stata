@@ -1,0 +1,391 @@
+---
+author: "Brannigan Vogt"
+date: "11/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+$$\text{EC 570} \\
+\text{Fall 2021} \\
+\text{Stata Take Home Final Exam} \\
+\text{Due: December 7 2021 11:59 PM} \\
+\text{Total Points: 65}$$
+
+For this question, you will need to use a dataset of your own choosing.
+
+$$\underline{\text{THIS IS A DRAFT: DO NOT GRADE}}\\
+\text{Collin Campbell,} \text{ and}\\
+\text{Mitch Priestley, and} \\
+\text{Brannigan Vogt,} \\
+\underline{\text{do not }} \text{offer this document as our submission.}\\
+\underline{\text{THIS IS A DRAFT: DO NOT GRADE}}$$
+
+Use the data to answer the following questions. **Don’t forget to copy and paste in only the relevant part of your Stata output for each question.**
+
+**1.**	Upload your dataset in Stata format via D2L’s Dropbox function. **(1 points)**
+
+  Steps:
+
+  1.	On the Assessments tab (near the top) click on Dropbox.
+  2.	Click on Student Data Files.
+  3.	Click on Add a File and upload your data file.
+  4.	In the comments section list all group member names, including yourself.
+  5.	Submit.
+
+If you have trouble uploading your dataset, please contact me ASAP.
+
+***
+
+\newpage
+
+**2.** Write a **brief** description of your dataset (about 1-2 paragraphs).  Who collected the data?  What kind of data is it (cross sectional, time series, repeated cross-sectional, or panel)?  When were the data collected?  How was the sample constructed?  What is the population of interest? What are the main variables (or types of variables) covered in the data? Include a proper citation of your data (see some instructions and an example [here](http://guides.library.ucsc.edu/citedata)).  If possible, include a link to where you downloaded your dataset. **Clarity is very important here and throughout this portion of homework assignments. (2 points)**
+
+***
+
+The US Census Bureau annually attempts to observe around 3.5 million residential addresses through the [American Community Survey (ACS)](https://www.census.gov/programs-surveys/acs). This Stata take-home final exam will consider a dataset derived from the [Year 2019 ACS](https://www.census.gov/programs-surveys/acs/about/forms-and-instructions/2019-form.html). These data were accessed using Integrated Public Use Microdata Series (IPUMS). The Census Bureau [contacted addresses](https://www.census.gov/programs-surveys/acs/respond/other-ways-to-respond.html) by mail requesting that the dwellers of the residence fill out an online form. If dwellers at some address do not respond online promptly than the Census Bureau will mail a paper version of the questionnaire. Once a paper form has been ignored, the addresses may receive an in-person visit for interview from a Census Bureau employee.
+
+All members of the US should be considered as the population of interest. The Census Bureau also wants more local data, towards offering cities counties and states vital household economic social demographic data, making for an overall regionally-representative sample.
+
+When we derived our cross-sectional 2019 ACS data using IPUMS, we included variables with regards to house value and total household income. Our full list of selected variables includes those two as well as ownership of dwelling, annual electricity cost, annual gas cost, annual water cost, annual home heating fuel cost, multigenerational household, sex, age, race, educational attainment, employment status, total personal income, social security income, welfare (public assistance) income, interest dividend and rental income, retirement income, poverty status, and veteran status.
+
+Steven Ruggles, Sarah Flood, Sophia Foster, Ronald Goeken, Jose Pacas, Megan Schouweiler and Matthew Sobek. *IPUMS USA: Version 11.0* [dataset]. Minneapolis, MN: IPUMS, 2021.
+https://doi.org/10.18128/D010.V11.0
+
+\newpage
+
+**3.** Choose **2 continuous (i.e. not dummy/binary or categorical)** variables from your dataset. You will be studying the relationship between these variables so one should be considered an outcome variable $y$ and one an explanatory variable $x_1$. Choose ones that make sense for this type of relationship. Describe both variables here in words, including what they are meant to capture, units of measurement, etc. Be clear on which is the outcome variable and which is the explanatory variable. **(2 points)**
+
+***
+
+$$\text{ANSWER 3}$$
+
+\newpage
+
+**4.** Provide summary statistics (number of observations, mean, standard deviation, minimum and maximum) for your two variables described in part (3). **Calculate these summary statistics only for the sample that you use in part (6).**  This means that your sample size for each variable should match the sample size in part (6).  To do this, you first run the regression in part (6).  Then immediately after you run the regression, you use the summarize command and an “if” statement as follows:
+
+    regress y x
+    summarize y x if e(sample)==1
+
+Be sure to display the summary statistics **in a neatly formatted table** (i.e. do NOT simply copy and paste Stata output).  **(2 points)**
+You can refer these: 
+  * [Using outreg2 to report regression output, descriptive statistics, frequencies and basic crosstabulations](https://www.princeton.edu/~otorres/Outreg2.pdf)
+  * In Stata type: `help outreg2`
+
+
+***
+
+    regress valueh hhincome`
+    summarize valueh hhincome if e(sample)==1`
+
+$$\text{ANSWER 4}$$
+
+\newpage
+
+**5.** Create a scatterplot of you two variables. You may copy and paste your graph from Stata, but please make sure your graph is clearly formatted (e.g. that the axes are labeled clearly with labels that make sense – **not** just nonsensical variable names).  **(2 points)**
+
+***
+
+$$\text{ANSWER 5}$$
+
+\newpage
+
+**6.** Regress your outcome variable on your explanatory variable. Copy paste Stata output here. Report your results in an equation (like in the lecture notes) AND in a **formatted table** using outreg2. **(2 points)**
+
+***
+
+$$\text{ANSWER 6}$$
+
+\newpage
+
+**7.** Interpret the slope coefficient and the intercept. **(2 points)**
+
+***
+
+$$\text{ANSWER 7}$$
+
+\newpage
+
+**8.** With respect to your results in the table in part (6), explain how there will be a omitted variables bias?  Do you think the bias will be positive or negative? **Explain. (2 points)**
+
+***
+
+$$\text{ANSWER 8}$$
+
+\newpage
+
+**9.** Choose another **continuous** variable to add to your regression from your dataset $(x_2)$.  Briefly describe this new variable (including units of measurement). **(1 point)**
+
+***
+
+$$\text{ANSWER 9}$$
+
+\newpage
+
+**10.** Provide a neatly formatted table with summary statistics for **all** three variables: variables you chose in part (3) and the one you chose in part (9): $y$, $x_1$ $x_2$.
+
+**Calculate these summary statistics only for the sample that you use in part (14).**  This means that your sample size for each variable should match the sample size in part (14).  Because you are including a new variable, this may change your sample size from part(6) (and part(4))  so you may need to recalculate summary statistics even for $y$ and $x_1$. **(2 points)**
+
+***
+
+$$\text{ANSWER 10}$$
+
+\newpage
+
+**11.** Write down your multiple regression equation (including your new variable).  See example below; **replace the $x$s and $y$s with your variable names. (1 point)**
+
+$$y = \beta_0 + \beta_1 x_1 + \beta_1 x_2 + u$$
+
+***
+
+$$\text{ANSWER 11}$$
+
+\newpage
+
+**12.** Does your new variable $(x_2)$ help you reduce some of the omitted variables bias that you discuss in part (8)? **Explain. (2 points)**
+
+***
+
+$$\text{ANSWER 12}$$
+
+\newpage
+
+**13.** Run the regression in part (11).  Copy paste your Stata output here. Report your results in equation format. Interpret each coefficient and indicate whether or not it is statistically significant (for both $\hat{\beta_1}$ and $\hat{\beta_2}$). [You do not need to interpret the intercept, $\hat{\beta_0}$.) **(2 points)**
+
+***
+
+$$\text{ANSWER 13}$$
+
+\newpage
+
+**14.** 	Now run a new regression where you characterize $y$ in natural log form rather than levels, i.e.
+
+$$\ln (y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + u$$
+
+[*Hint: to do this, you will need to generate a new variable that is the natural log of y.  For example, you might call this new variable lny.*] Copy paste your Stata output here. Report your results in equation format.   Interpret the coefficients $\hat{\beta_1}$ and $\hat{\beta_2}$. If there is no meaningful interpretation of the coefficients, please explain. **(2 points)**
+
+***
+
+$$\text{ANSWER 14}$$
+
+\newpage
+
+**15.** 	Now run a regression where you include a quadratic term in either $x_1$ or $x_2$ (but with $y$ **in levels**, as in part (11)).  For example, if you choose to include a quadratic term in $x_2$, your regression will be
+
+$$y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_2^2+ u$$
+
+[*Hint: To do this, you will need to generate a new variable that is the square of your explanatory variable of choice.  In this example, you might call this new variable x2sq.*]  Copy paste your Stata output here. Report your results in equation format. What is the association between your outcome and your variable that includes the quadratic term, **at the sample mean of that variable**? Explain this association in words. **(2 points)**
+
+***
+
+$$\text{ANSWER 15}$$
+
+\newpage
+
+**16.**	Create a new formatted table using outreg2 that includes all of your regression results from parts (6), (11), (14), and (15) and paste it here.  The final product should be a table with 4 columns:
+
+  1. Column 1 has only one explanatory variable, $x_1$ (from question 6)
+	2. Column 2 has two explanatory variables, $x_1$ and $x_2$ (from question 11)
+	3. Column 3 has two explanatory variables, $x_1$ and $x_2$ and the dependent variable is ln⁡(y) (from question 14)
+	4. Column 4 has three explanatory variables, $x_1$, $x_2$ and $x_2^2$.  (The dependent variable is $y$.) (from question 15)
+
+**Be sure that your table is formatted clearly, with column numbers and easily identifiable entries (e.g. no mysterious variable names).  (2 points)**
+
+***
+
+$$\text{ANSWER 16}$$
+
+\newpage
+
+Choose a **binary explanatory** variable to add to your regression from your dataset.  If you do not have a binary variable in your dataset, create one from a continuous or categorical variable.  For example, if you have data on income (continuous), use it to create a dummy variable (e.g. high or low income). Or, if you have data on school type (private, public, religious), you might create a dummy variable that is 1 for private or religious and 0 for public.
+If you want, you can also have a binary dependent variable, but this is NOT required.  However, if you use a binary dependent variable, you must be careful when interpreting coefficients – specifically, you’ll need to interpret everything in terms of percentage point changes in the probability that your dependent variable is equal to 1.
+
+**17.** Copy and paste your variables description from previous parts and add the description of this new variable. **(2 points)**
+
+***
+
+$$\text{ANSWER 17}$$
+
+\newpage
+
+**18.** Add the summary statistics for your new variable to the summary statistics table from before and display here. You must provide a neatly formatted table. **(2 points)**
+
+***
+
+$$\text{ANSWER 18}$$
+
+\newpage
+
+**19.**	Create a separate histogram of your outcome variable for each value of your binary variable using Stata’s histogram command with the “by” option.  For example, your code might be: `histogram y, by (x3)` where $y$ is your dependent variable and $x3$ is your binary variable. **(2 points)**
+
+***
+
+$$\text{ANSWER 19}$$
+
+\newpage
+
+**20.** Write down your multiple regression equation (including your new binary variable $x$ 3).   
+Note: you may either add your new binary variable to your regression from (11) OR you can replace one of your continuous variables with your new binary variable (if, for example, you used one of your previous continuous variables to create a new binary variable).  **Make sure your regression contains at least one continuous variable and one binary variable. (2 points)**
+
+
+***
+
+$$\text{ANSWER 20}$$
+
+\newpage
+
+**21.**	Run the regression in part (20).  Copy paste your Stata output here. Report your results in equation format. Interpret the coefficient on the **binary variable** and explain whether or not it is statistically significant. **(2 points)**
+
+***
+
+$$\text{ANSWER 21}$$
+
+\newpage
+
+**22.** 	Create a scatterplot that shows the relationship between your dependent variable and one continuous explanatory variable, separately for when your binary variable is equal to 1 and when it is equal to 0. **Make sure your scatterplot is very clear and easy to read – it should have different markers for when your binary variable is equal to 1 and when it is equal to 0 and it should have a legend. (2 points)**
+
+Hint: The Stata code might be helpful:
+
+    twoway (scatter y x1 if x3==1) (scatter y x1 if x3==0, ms(X)), legend(label(1 "High Income") label(2 "Low Income"))
+    
+where $y$ is your dependent variable, $x1$ is your continuous variable and $x3$ is your binary variable.
+
+***
+
+$$\text{ANSWER 22}$$
+
+\newpage
+
+**23.** 	Create two linear fit plots that shows the relationship between your dependent variable and your continuous variable (the same one from part (22)), separately for when your binary variable is equal to 1 and when it is equal to 0 (but on the SAME graph).  Make sure your linear fit plots are very clear and easy to read – it should have different line styles for when your binary variable is equal to 1 and when it is equal to 0 and it should have a legend.
+
+  For example, your code might be `twoway (lfit y x1 if x3==1) (lfit y x1 if x3==0, lp(-)), legend(label(1 "High Income") label(2 "Low Income"))` where y is your dependent variable, x1 is your continuous variable and x3 is your binary variable.
+
+Based on your plot, does it look like the relationship between your dependent variable and your continuous explanatory variable differs, depending on your binary variable? **(2 points)**
+
+***
+
+$$\text{ANSWER 23}$$
+
+\newpage
+
+**24.** Now run a new regression where you allow the effect of the continuous explanatory variable (the same one from parts (22) and (23)) to differ, depending on the value of your binary variable. Hint: You might have to use an interaction term. Copy paste your Stata output here. Report your results in equation format. **(2 points)**
+
+***
+
+$$\text{ANSWER 24}$$
+
+\newpage
+
+**25.** Is the interaction term in part (24) statistically significant?  What does this tell you about the relationship between your dependent variable and your continuous explanatory variable? **(2 points)**
+
+***
+
+$$\text{ANSWER 25}$$
+
+\newpage
+
+**26.**	According to your regression results in part (24), what is the association between your dependent variable and your continuous explanatory variable when your binary variable is equal to 1?  What about when your binary variable is equal to 0?  Are these associations statistically significant? [Hint: you may need to use Stata’s lincom command.]  **(2 points)**
+
+***
+
+$$\text{ANSWER 26}$$
+
+\newpage
+
+**27.** Think about the multiple regression equations from before [i.e from parts 11, 14, 15, 21 and 24] and write down the one that makes most sense to you. It can include binary variables, but it does not have to. Other than including multiple explanatory variables, there is no restriction on what type of variables you include. **[1 point]**
+
+***
+
+$$\text{ANSWER 27}$$
+
+\newpage
+
+**28.**	Estimate the multiple regression equation in part (27) and report the results here. Don’t forget to specify robust standard errors if your sample size is large enough. **[1 point]**
+
+***
+
+$$\text{ANSWER 28}$$
+
+\newpage
+
+**29.** Do you think the **dependent** variable in your regression from part (28) is reported with error? Explain briefly. If you think it is measured with error, explain whether you think that measurement error will lead to bias and whether that bias will lead you to under- or overestimate the true effect. *Regardless of whether you think the measurement error causes bias*, what effect does measurement error in your dependent variable have on the precision of your estimates? **[2 points]**
+
+***
+
+$$\text{ANSWER 29}$$
+
+\newpage
+
+**30.** Do you think the **explanatory** variables in your regression from part (28) are reported with error?  Explain briefly. If some or all variables in your regression are measured with error, explain whether you think that measurement error will lead to bias and whether that bias will lead you to under- or overstimate the true effect. **[2 points]**
+
+***
+
+$$\text{ANSWER 30}$$
+
+\newpage
+
+**31.** Do you think your regression estimates suffer from sample selection bias?  Explain. (For this part, do not discuss missing data.) **[2 points]**
+
+***
+
+$$\text{ANSWER 31}$$
+
+\newpage
+
+**32.**	Do you have missing data for any of the observations in your regression sample?  Do you think the data are missing at random? Will the missing data cause bias? **[2 points]**
+
+To help see whether the data are missing at random (and thus whether or not the missing data are likely to cause bias), create a dummy variable that is equal to 1 when data is missing and that is 0 when the data are not missing (for each variable in your regression).  Then regress that dummy variable on other explanatory variables. 
+
+For example, if you have data on income, age, and race, you would create the following dummy variables:
+
+    gen missing_inc = (income==.)
+    gen missing_age = (age==.)
+    gen missing_race = (race==.)
+
+and then you would regress each of those on the other variables, e.g.
+
+    reg missing_inc age i.race
+
+If income is (statistically significantly) more likely to be missing for older (or younger) people or for people of a specific race, then the data are not missing at random and will likely cause bias. (Clearly this will only be helpful for observations where you have missing values for some but not all variables.)
+
+Note: in order to show your results concisely, use the outreg2 command.  Continuing the example above, this would mean doing the following:
+
+    reg missing_inc age i.race
+    outreg2 using missingdata, bdec(3) word excel replace 
+    reg missing_age i.race income
+    outreg2 using missingdata, bdec(3) word excel append 
+    reg missing_race age income
+    outreg2 using missingdata, bdec(3) word excel append
+
+**Copy and paste only the final formatted table here.**
+
+
+***
+
+$$\text{ANSWER 32}$$
+
+\newpage
+
+**33.**	Does your regression sample contain outliers and/or influential observations?  In order to answer this question, you should provide some supporting evidence (copy and paste here). This might include things like scatterplots, histograms, detailed summary statistics, or regression results with and without certain observations. Which regression results – with or without the outliers/influential points – do you think are more believable? Explain. **[2 points]**
+
+***
+
+$$\text{ANSWER 33}$$
+
+\newpage
+
+**34.** Use the Breusch-Pagan Test to test for heteroscedasticity.  Paste the Stata output for the regression you use to perform the test and state your conclusion here.  Hint: when you run the regression to calculate the residuals, you should NOT specify robust standard errors. **[2 points]**
+
+***
+
+$$\text{ANSWER 34}$$
+
+\newpage
+
+**35.**	Use the two versions of the White test to test for heteroscedasticity.  You should use the built-in Stata command to perform these tests.  Paste the Stata output for the tests and state your conclusions here. **[2 points]**
+
+***
+
+$$\text{ANSWER 35}$$
