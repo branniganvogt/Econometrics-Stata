@@ -39,6 +39,33 @@ If you have trouble uploading your dataset, please contact me ASAP.
 
 ***
 
+Obtain `usa_00003.dat` and `usa_00003.do` from IPUMS.
+In Stata with proper working directory, `File -> Do` run the do file and it will process in the dat file.
+
+Then clean the data with following Stata command sequence,
+
+    drop if age > 64
+    drop if age < 18
+
+    replace valueh = . if valueh > 9999990
+    replace valueh = . if valueh == 0035000
+    replace valueh = . if valueh == 0050000
+    replace valueh = . if valueh ==  0100000
+    replace valueh = . if valueh ==  0200000
+    replace valueh = . if valueh ==  0400000   
+    replace valueh = . if valueh == 1000000
+
+    replace hhincome = . if hhincome == 9999999
+
+    replace costelec = . if costelec > 9990
+    replace costelec =. if costelec == 0000
+
+    count if educd == 999
+
+    gen collegegrad = (educd >= 101)
+
+Dropping sample down to just ages 18-64 brings sample size down to $1,921,823$.
+
 \newpage
 
 **2.** Write a **brief** description of your dataset (about 1-2 paragraphs).  Who collected the data?  What kind of data is it (cross sectional, time series, repeated cross-sectional, or panel)?  When were the data collected?  How was the sample constructed?  What is the population of interest? What are the main variables (or types of variables) covered in the data? Include a proper citation of your data (see some instructions and an example [here](http://guides.library.ucsc.edu/citedata)).  If possible, include a link to where you downloaded your dataset. **Clarity is very important here and throughout this portion of homework assignments. (2 points)**
@@ -54,13 +81,36 @@ When we derived our cross-sectional 2019 ACS data using IPUMS, we included varia
 Steven Ruggles, Sarah Flood, Sophia Foster, Ronald Goeken, Jose Pacas, Megan Schouweiler and Matthew Sobek. *IPUMS USA: Version 11.0* [dataset]. Minneapolis, MN: IPUMS, 2021.
 https://doi.org/10.18128/D010.V11.0
 
+"ACS is monthly rolling samples of households that was designed to replace the Census long form. Nationally-representative ACS data has been available each year since 2000"
+
+"include about 3 million households nationwide"
+
+"The public use samples of the ACS and PRCS are extracted from the Census Bureau's larger internal data files and are thus subject to additional sampling error and further data processing (such as imputation and allocation).
+
+The sampling unit is the household and all persons residing in the household. To protect individual confidentiality, geographic identifiers are currently restricted to the state level, and individual variables, such as income and housing values, are Top coded.
+
+The ACS/PRCS sample design approximates the Census 2000 long form sample design and oversamples areas with smaller populations. Each month a systematic sample is drawn to represent each U.S. county or county equivalent. The selected monthly sample is mailed the ACS/PRCS survey at the beginning of the month. Nonrespondents are contacted via telephone for a computer assisted telephone interview (CATI) one month later. One third of the nonrespondents to the mail or telephone survey are contacted in person for a computer assisted personal interview (CAPI) one month following the CATI attempt. Weights included with the ACS PUMS for the household and person-level data adjust for the mixed geographic sampling rates, nonresponse adjustments, and individual sampling probabilities. Estimates from the ACS IPUMS samples may not be consistent with summary table ACS estimates due to the additional sampling error."
+
+https://usa.ipums.org/usa/chapter2/chapter2.shtml#ACS
+
+**The population of interest in our research analysis is subset of US adults: US residents age 18-64 with total housing units value below one million dollars.**
+
 \newpage
 
 **3.** Choose **2 continuous (i.e. not dummy/binary or categorical)** variables from your dataset. You will be studying the relationship between these variables so one should be considered an outcome variable $y$ and one an explanatory variable $x_1$. Choose ones that make sense for this type of relationship. Describe both variables here in words, including what they are meant to capture, units of measurement, etc. Be clear on which is the outcome variable and which is the explanatory variable. **(2 points)**
 
 ***
 
-$$\text{ANSWER 3}$$
+$$y: valueh \text{ i.e., total home value} \\
+x_1: hhincome \text{ i.e., total household income }$$
+
+We have chosen to treat house value as outcome variable and household income as explanatory variable.
+
+"HHINCOME reports the total money income of all household members age 15+ during the previous year. The amount should equal the sum of all household members' individual incomes, as recorded in the person-record variable INCTOT. The persons included were those present in the household at the time of the census or survey. People who lived in the household during the previous year but who were no longer present at census time are not included, and members who did not live in the household during the previous year but who had joined the household by the time of the census or survey, are included. For the census, the reference period is the previous calendar year; for the ACS and the PRCS, it is the previous 12 months.
+
+Note that household income differs from family income, which is reported in FTOTINC. The family income variable only reports the incomes of household members related to the head, while HHINCOME includes the incomes of all household members."
+
+"VALUEH reports the value of housing units in contemporary dollars."
 
 \newpage
 
@@ -70,17 +120,20 @@ $$\text{ANSWER 3}$$
     summarize y x if e(sample)==1
 
 Be sure to display the summary statistics **in a neatly formatted table** (i.e. do NOT simply copy and paste Stata output).  **(2 points)**
+
 You can refer these: 
+  
   * [Using outreg2 to report regression output, descriptive statistics, frequencies and basic crosstabulations](https://www.princeton.edu/~otorres/Outreg2.pdf)
+  
   * In Stata type: `help outreg2`
 
 
 ***
 
-    regress valueh hhincome`
-    summarize valueh hhincome if e(sample)==1`
+    summarize valueh hhincome if e(sample)==1
 
-$$\text{ANSWER 4}$$
+$$\text{ANSWER 4}\\
+\text{REQUIRES outreg2 COMMAND or similar}$$
 
 \newpage
 
@@ -88,7 +141,9 @@ $$\text{ANSWER 4}$$
 
 ***
 
-$$\text{ANSWER 5}$$
+`twoway (scatter valueh hhincome) (lfit valueh hhincome) , xtitle("Total Household Income") ytitle("Total value of housing units")`
+
+![](Stata.Q5.PNG)
 
 \newpage
 
@@ -96,7 +151,17 @@ $$\text{ANSWER 5}$$
 
 ***
 
-$$\text{ANSWER 6}$$
+    regress valueh hhincome
+    summarize valueh hhincome if e(sample)==1
+    regress valueh hhincome [fw = perwt]
+    summarize valueh hhincome if e(sample)==1
+
+![](Stata.Q6.PNG)
+
+![](Stata.Q6.pw.PNG)
+
+$$\text{ANSWER 6}\\
+\text{REQUIRES outreg2 COMMAND}$$
 
 \newpage
 
@@ -112,6 +177,10 @@ $$\text{ANSWER 7}$$
 
 ***
 
+I think *costelec* is positively correlated with *valueh* and with *hhincome* leading to a positive bias.
+
+Big expensive house, high cost of electricity, higher price, higher income to afford.
+
 $$\text{ANSWER 8}$$
 
 \newpage
@@ -119,6 +188,12 @@ $$\text{ANSWER 8}$$
 **9.** Choose another **continuous** variable to add to your regression from your dataset $(x_2)$.  Briefly describe this new variable (including units of measurement). **(1 point)**
 
 ***
+
+$$x_2: costelec \text{ i.e., Annual household cost of electricity}$$
+
+"COSTELEC gives the annual electricity cost for each housing unit (rented or owned)"
+
+dollars
 
 $$\text{ANSWER 9}$$
 
@@ -140,7 +215,8 @@ $$y = \beta_0 + \beta_1 x_1 + \beta_1 x_2 + u$$
 
 ***
 
-$$\text{ANSWER 11}$$
+
+$$valueh = \beta_0 + \beta_1 hhincome + \beta_1 costelec + u$$
 
 \newpage
 
@@ -168,6 +244,8 @@ $$\ln (y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + u$$
 
 ***
 
+$$\ln (valueh) = \beta_0 + \beta_1 hhincome + \beta_2 costelec + u$$
+
 $$\text{ANSWER 14}$$
 
 \newpage
@@ -179,6 +257,8 @@ $$y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_2^2+ u$$
 [*Hint: To do this, you will need to generate a new variable that is the square of your explanatory variable of choice.  In this example, you might call this new variable x2sq.*]  Copy paste your Stata output here. Report your results in equation format. What is the association between your outcome and your variable that includes the quadratic term, **at the sample mean of that variable**? Explain this association in words. **(2 points)**
 
 ***
+
+$$valueh = \beta_0 + \beta_1 hhincome + \beta_2 costelec + \beta_3 hhincome^2 + u$$
 
 $$\text{ANSWER 15}$$
 
@@ -239,6 +319,8 @@ $$\text{ANSWER 20}$$
 **21.**	Run the regression in part (20).  Copy paste your Stata output here. Report your results in equation format. Interpret the coefficient on the **binary variable** and explain whether or not it is statistically significant. **(2 points)**
 
 ***
+
+$$valueh = \beta_0 + \beta_1 hhincome + \beta_2 costelec + \beta_3 collegegrad + u$$
 
 $$\text{ANSWER 21}$$
 
@@ -364,6 +446,9 @@ Note: in order to show your results concisely, use the outreg2 command.  Continu
 
 ***
 
+    gen missing_hhincome = (hhincome==.)
+    gen missing_costelec = (costelec==.)
+
 $$\text{ANSWER 32}$$
 
 \newpage
@@ -389,3 +474,336 @@ $$\text{ANSWER 34}$$
 ***
 
 $$\text{ANSWER 35}$$
+
+\newpage
+
+Variable: "COSTELEC"
+
+Name:	COSTELEC
+
+Label:	Annual electricity cost
+
+Variable Text:	COSTELEC for 1970 reports each rented housing unit's annual electricity cost, excluding amounts included with contract rent payments. For later years, COSTELEC gives the annual electricity cost for each housing unit (rented or owned), again excluding amounts included in contract rent or other types of payments. For 1970 and 1980, units within the universe that used no electricity can be identified. Beginning in 1990, the form combines the categories "no charge" and "no electricity used."
+
+COSTELEC amounts for renters are part of RENTGRS. Census Bureau research comparing respondents' reported costs with utility company records indicates that respondents tend to overstate their costs.
+
+In 1970, the universe for the U.S. Census samples specifies renter-occupied units rented for cash rent, not one-family houses on 10+ acres and not group quarters; however in the Puerto Rican census of 1970, this specification is for renter-occupied units rented for cash rent, not one-family houses on 3+ cuerdas, and not group quarters.
+
+Amounts are expressed in contemporary dollars, and users studying change over time must adjust for inflation (See INCTOT for Consumer Price Index adjustment factors). The exception is the ACS/PRCS multi-year files, where all dollar amounts have been standardized to dollars as valued in the final year of data included in the file (e.g., 2007 dollars for the 2005-2007 3-year file). Additionally, more detail may be available than exists in the original ACS samples.
+
+User Note:
+
+The traditional unit of land area in Puerto Rico is the cuerda. The cuerda is equal to about 3930 square meters, 4700 square yards, or 0.971 acres. Because the cuerda and the acre are so close to being equal, they are often treated informally as being equal. Mainlanders sometimes call the unit the "Spanish Acre." The IPUMS has preserved the units for the mainland U.S. as acres and Puerto Rico as cuerdas.
+
+Concept:	Economic Characteristic Variables -- HOUSEHOLD
+
+Start Position:	71
+
+End Position:	74
+
+Width:	4
+
+Variable Format:	numeric
+
+Implied Decimal Places:	0
+
+
+Variable: "HHINCOME"
+
+Name:	HHINCOME
+
+Label:	Total household income
+
+Variable Text:	HHINCOME reports the total money income of all household members age 15+ during the previous year. The amount should equal the sum of all household members' individual incomes, as recorded in the person-record variable INCTOT. The persons included were those present in the household at the time of the census or survey. People who lived in the household during the previous year but who were no longer present at census time are not included, and members who did not live in the household during the previous year but who had joined the household by the time of the census or survey, are included. For the census, the reference period is the previous calendar year; for the ACS and the PRCS, it is the previous 12 months.
+
+Note that household income differs from family income, which is reported in FTOTINC. The family income variable only reports the incomes of household members related to the head, while HHINCOME includes the incomes of all household members.
+
+Amounts are expressed in contemporary dollars, and users studying change over time must adjust for inflation (See INCTOT for Consumer Price Index adjustment factors). The exception is the ACS/PRCS multi-year files, where all dollar amounts have been standardized to dollars as valued in the final year of data included in the file (e.g., 2007 dollars for the 2005-2007 3-year file). Additionally, more detail may be available than exists in the original ACS samples.
+
+User Note: ACS respondents are surveyed throughout the year, and amounts do not reflect calendar year dollars. While the Census Bureau provides an adjustment factor (available in ADJUST), this is an imperfect solution. See the ACS income variables note for further details.
+
+Concept:	Economic Characteristic Variables -- HOUSEHOLD
+Start Position:	87
+
+End Position:	93
+
+Width:	7
+
+Variable Format:	numeric
+
+Implied Decimal Places:	0
+
+Coder
+
+Variable: "VALUEH"
+
+Name:	VALUEH
+
+Label:	House value
+
+Variable Text:	VALUEH reports the value of housing units in contemporary dollars. For 1930, 1940, and from 2008 onward, VALUEH is a continuous variable. The other years report the midpoint of an interval; see codes and frequencies for intervals.
+
+User Note: Universe shifts and changing methods of determining value complicate use of this variable for comparisons across years. Furthermore, dollar amounts were intervalled differently for each year, and the top codes changed. Users must adjust for the effects of inflation; see INCTOT for Consumer Price Index adjustment factors.
+
+User Note: The traditional unit of land area in Puerto Rico is the cuerda. The cuerda is equal to about 3930 square meters, 4700 square yards, or 0.971 acres. Because the cuerda and the acre are so close to being equal, they are often treated informally as being equal. Mainlanders sometimes call the unit the "Spanish Acre." The IPUMS has preserved the units for the mainland U.S. as acres and Puerto Rico as cuerdas.
+
+Concept:	Economic Characteristic Variables -- HOUSEHOLD
+Start Position:	94
+
+End Position:	100
+
+Width:	7
+
+Variable Format:	numeric
+
+Implied Decimal Places:	0
+
+Categories
+
+Value	Label
+
+0000000	$0 (1940)
+
+0000250	Less than $500
+
+0000500	Less than $999
+
+0001000	Less than $2,000
+
+0001500	$2,000- 1,999
+
+0002500	Less than $5,000
+
+0003500	$3,000- 3,999
+
+0004000	$3,000- 4,999
+
+0004500	$4,000- 4,999
+
+0005000	Less than $10,000
+
+0006250	$5,000 - 7,499
+
+0008750	$7,500 - 9,999
+
+0012500	$10,000 - 14,999
+
+0011250	$10,000 - 12,499
+
+0013750	$12,500 - 14,999
+
+0017500	$15,000 - 19,999
+
+0016250	$15,000 - 17,499
+
+0018750	$17,500 - 19,999
+
+0025000	$20,000- 29,999
+
+0022500	$20,000 - 24,999
+
+0021250	$20,000 - 22,499
+
+0023750	$22,500 - 24,999
+
+0030000	$25,000 - 34,999
+
+0026250	$25,000 - 27,499
+
+0027500	$25,000 - 29,999
+
+0028750	$27,500 - 29,999
+
+0032500	$30,000 - 34,999
+
+0031250	$30,000- 32,499
+
+0033750	$32,500- 34,999
+
+0035000	$35,000+
+
+0042500	$35,000 - 49,999
+
+0037500	$35,000 - 39,999
+
+0036250	$35,000- 37,499
+
+0038750	$37,500- 39,999
+
+0045000	$40,000 - 49,999
+
+0042499	$40,000 - 44,999
+
+0047500	$45,000 - 49,999
+
+0050000	$50,000+
+
+0055000	$50,000 - 59,999
+
+0052500	$50,000 - 54,999
+
+0057500	$55,000 - 59,999
+
+0065000	$60,000 - 69,999
+
+0062500	$60,000 - 64,999
+
+0067500	$65,000 - 69,999
+
+0075000	$70,000 - 79,999
+
+0072500	$70,000 - 74,999
+
+0077500	$75,000 - 79,999
+
+0087500	$75,000 - 99,999
+
+0085000	$80,000 - 89,999
+
+0095000	$90,000 - 99,999
+
+0100000	$100,000+
+
+0112500	$100,000 - 124,999
+
+0137500	$125,000 - 149,999
+
+0175000	$150,000 - 199,999
+
+0162500	$150,000 - 174,999
+
+0187500	$175,000 - 199,999
+
+0200000	$200,000+
+
+0225000	$200,000 - 249,999
+
+0275000	$250,000 - 299,999
+
+0350000	$300,000 - 399,999
+
+0400000	$400,000+
+
+0450000	$400,000 - 499,999
+
+0625000	$500,000 - 749,999
+
+0875000	$750,000 - 999,999
+
+1000000	$1,000,000+
+
+9999998	Missing
+
+9999999	N/A
+
+Variable: "EDUCD"
+
+Name:	EDUCD
+
+Label:	Educational attainment [detailed version]
+
+Variable Text:	EDUC indicates respondents' educational attainment, as measured by the highest year of school or degree completed. Note that completion differs from the highest year of school attendance; for example, respondents who attended 10th grade but did not finish were classified in EDUC as having completed 9th grade. For additional detail on grade attendance, see GRADEATT as well as the detailed version of HIGRADE.
+
+Concept:	Education Variables -- PERSON
+
+Start Position:	128
+
+End Position:	130
+
+Width:	3
+
+Variable Format:	numeric
+
+Implied Decimal Places:	0
+
+Categories
+
+Value	Label
+
+000	N/A or no schooling
+
+001	N/A
+
+002	No schooling completed
+
+010	Nursery school to grade 4
+
+011	Nursery school, preschool
+
+012	Kindergarten
+
+013	Grade 1, 2, 3, or 4
+
+014	Grade 1
+
+015	Grade 2
+
+016	Grade 3
+
+017	Grade 4
+
+020	Grade 5, 6, 7, or 8
+
+021	Grade 5 or 6
+
+022	Grade 5
+
+023	Grade 6
+
+024	Grade 7 or 8
+
+025	Grade 7
+
+026	Grade 8
+
+030	Grade 9
+
+040	Grade 10
+
+050	Grade 11
+
+060	Grade 12
+
+061	12th grade, no diploma
+
+062	High school graduate or GED
+
+063	Regular high school diploma
+
+064	GED or alternative credential
+
+065	Some college, but less than 1 year
+
+070	1 year of college
+
+071	1 or more years of college credit, no degree
+
+080	2 years of college
+
+081	Associate's degree, type not specified
+
+082	Associate's degree, occupational program
+
+083	Associate's degree, academic program
+
+090	3 years of college
+
+100	4 years of college
+
+101	Bachelor's degree
+
+110	5+ years of college
+
+111	6 years of college (6+ in 1960-1970)
+
+112	7 years of college
+
+113	8+ years of college
+
+114	Master's degree
+
+115	Professional degree beyond a bachelor's degree
+
+116	Doctoral degree
+
+999	Missing
