@@ -80,8 +80,6 @@ $$\text{ANSWER 2.1}$$
 
 \newpage
 
-**Question 2 (16 points total)**
-
   2. You are also worried that you are leaving out an important variable: health care access.  Your reasoning is that counties without adequate access to health care will have higher *IMR* and in general, health care access is lower in counties with a larger black population (higher *pctblack*).  If this is the case, would $\hat{beta_1}$ be an over- or underestimate of $\beta_1$?  Explain. [3 points]
 
 ***
