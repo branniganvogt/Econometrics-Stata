@@ -1,7 +1,6 @@
 ---
-author: "Brannigan Vogt"
-date: "11/20/2021"
-output: html_document
+output:
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -10,802 +9,107 @@ knitr::opts_chunk$set(echo = TRUE)
 
 $$\text{EC 570} \\
 \text{Fall 2021} \\
-\text{Stata Take Home Final Exam} \\
-\text{Due: December 7 2021 11:59 PM} \\
-\text{Total Points: 65}$$
+\text{Homework Assignment #6} \\
+\text{Due date: November 25 2021}$$
 
-For this question, you will need to use a dataset of your own choosing.
+$\text{Brannigan Vogt}$
 
-$$\underline{\text{THIS IS A DRAFT: DO NOT GRADE}}\\
-\text{Collin Campbell,} \text{ and}\\
-\text{Mitch Priestley, and} \\
-\text{Brannigan Vogt,} \\
-\underline{\text{do not }} \text{offer this document as our submission.}\\
-\underline{\text{THIS IS A DRAFT: DO NOT GRADE}}$$
+**Question 1 (10 points)**
 
-Use the data to answer the following questions. **Don’t forget to copy and paste in only the relevant part of your Stata output for each question.**
+We know that in linear probability models (LPM) we should always use heteroskedasticity-robust standard errors. However, in LPMs we also know the functional form of the heteroskedasticity that we can use to obtain more efficient estimators. Suppose that the dependent variable $y$ is a binary variable and $x$ be the $1 \times K$ vector of explanatory variables. Suppose that we have the following LPM model
 
-**1.**	Upload your dataset in Stata format via D2L’s Dropbox function. **(1 points)**
+$$E[y | x] = Prob( y = 1 | x) = x\beta ≡ p(x)$$
 
-  Steps:
-
-  1.	On the Assessments tab (near the top) click on Dropbox.
-  2.	Click on Student Data Files.
-  3.	Click on Add a File and upload your data file.
-  4.	In the comments section list all group member names, including yourself.
-  5.	Submit.
-
-If you have trouble uploading your dataset, please contact me ASAP.
+  1. Write the conditional variance function $Var(y│x)$. **[2 points]**
 
 ***
 
-Obtain `usa_00003.dat` and `usa_00003.do` from IPUMS.
-In Stata with proper working directory, `File -> Do` run the do file and it will process in the dat file.
-
-Then clean the data with following Stata command sequence,
-
-    drop if age > 64
-    drop if age < 18
-
-    replace valueh = . if valueh > 9999990
-    replace valueh = . if valueh == 0035000
-    replace valueh = . if valueh == 0050000
-    replace valueh = . if valueh ==  0100000
-    replace valueh = . if valueh ==  0200000
-    replace valueh = . if valueh ==  0400000   
-    replace valueh = . if valueh == 1000000
-
-    replace hhincome = . if hhincome == 9999999
-
-    replace costelec = . if costelec > 9990
-    replace costelec =. if costelec == 0000
-
-    count if educd == 999
-
-    gen collegegrad = (educd >= 101)
-
-Dropping sample down to just ages 18-64 brings sample size down to $1,921,823$.
+$$Y = X\beta + U \\
+\implies Var(Y│X) = Var(U│X) \\
+Var(y│x) = E[y | x]* (1 - E[y|x]) \\
+Var(y│x) = x\beta * (1 - x\beta)\\
+Var(y│x) = x\beta - (x\beta)^2$$
 
 \newpage
 
-**2.** Write a **brief** description of your dataset (about 1-2 paragraphs).  Who collected the data?  What kind of data is it (cross sectional, time series, repeated cross-sectional, or panel)?  When were the data collected?  How was the sample constructed?  What is the population of interest? What are the main variables (or types of variables) covered in the data? Include a proper citation of your data (see some instructions and an example [here](http://guides.library.ucsc.edu/citedata)).  If possible, include a link to where you downloaded your dataset. **Clarity is very important here and throughout this portion of homework assignments. (2 points)**
+  2. What will you use as weights $(h_i)$ in the WLS estimation procedure given your answers above? **[2 points]**
 
 ***
 
-The US Census Bureau annually attempts to observe around 3.5 million residential addresses through the [American Community Survey (ACS)](https://www.census.gov/programs-surveys/acs). This Stata take-home final exam will consider a dataset derived from the [Year 2019 ACS](https://www.census.gov/programs-surveys/acs/about/forms-and-instructions/2019-form.html). These data were accessed using Integrated Public Use Microdata Series (IPUMS). The Census Bureau [contacted addresses](https://www.census.gov/programs-surveys/acs/respond/other-ways-to-respond.html) by mail requesting that the dwellers of the residence fill out an online form. If dwellers at some address do not respond online promptly than the Census Bureau will mail a paper version of the questionnaire. Once a paper form has been ignored, the addresses may receive an in-person visit for interview from a Census Bureau employee.
+We're assuming random sampling. Use $\frac{1}{\sqrt{h_i}}$ means each square residual weighted by $\frac{1}{h_i}$.
 
-All members of the US should be considered as the population of interest. The Census Bureau also wants more local data, towards offering cities counties and states vital household economic social demographic data, making for an overall regionally-representative sample.
+Given my answer above, in order to get a constant variance (account for heteroskedasticity) we will use the following as weights in the WLS estimation procedure.
 
-When we derived our cross-sectional 2019 ACS data using IPUMS, we included variables with regards to house value and total household income. Our full list of selected variables includes those two as well as ownership of dwelling, annual electricity cost, annual gas cost, annual water cost, annual home heating fuel cost, multigenerational household, sex, age, race, educational attainment, employment status, total personal income, social security income, welfare (public assistance) income, interest dividend and rental income, retirement income, poverty status, and veteran status.
-
-Steven Ruggles, Sarah Flood, Sophia Foster, Ronald Goeken, Jose Pacas, Megan Schouweiler and Matthew Sobek. *IPUMS USA: Version 11.0* [dataset]. Minneapolis, MN: IPUMS, 2021.
-https://doi.org/10.18128/D010.V11.0
-
-"ACS is monthly rolling samples of households that was designed to replace the Census long form. Nationally-representative ACS data has been available each year since 2000"
-
-"include about 3 million households nationwide"
-
-"The public use samples of the ACS and PRCS are extracted from the Census Bureau's larger internal data files and are thus subject to additional sampling error and further data processing (such as imputation and allocation).
-
-The sampling unit is the household and all persons residing in the household. To protect individual confidentiality, geographic identifiers are currently restricted to the state level, and individual variables, such as income and housing values, are Top coded.
-
-The ACS/PRCS sample design approximates the Census 2000 long form sample design and oversamples areas with smaller populations. Each month a systematic sample is drawn to represent each U.S. county or county equivalent. The selected monthly sample is mailed the ACS/PRCS survey at the beginning of the month. Nonrespondents are contacted via telephone for a computer assisted telephone interview (CATI) one month later. One third of the nonrespondents to the mail or telephone survey are contacted in person for a computer assisted personal interview (CAPI) one month following the CATI attempt. Weights included with the ACS PUMS for the household and person-level data adjust for the mixed geographic sampling rates, nonresponse adjustments, and individual sampling probabilities. Estimates from the ACS IPUMS samples may not be consistent with summary table ACS estimates due to the additional sampling error."
-
-https://usa.ipums.org/usa/chapter2/chapter2.shtml#ACS
-
-**The population of interest in our research analysis is subset of US adults: US residents age 18-64 with total housing units value below one million dollars.**
+$$h_i = h(x_i) = x\beta [1 - x\beta]\\
+\implies \frac{1}{\sqrt{h_i}} = \frac{1}{\sqrt{ x\beta [1 - x\beta]}}$$
 
 \newpage
 
-**3.** Choose **2 continuous (i.e. not dummy/binary or categorical)** variables from your dataset. You will be studying the relationship between these variables so one should be considered an outcome variable $y$ and one an explanatory variable $x_1$. Choose ones that make sense for this type of relationship. Describe both variables here in words, including what they are meant to capture, units of measurement, etc. Be clear on which is the outcome variable and which is the explanatory variable. **(2 points)**
+  3. Carefully explain the steps (in detail) how will you obtain the Feasible GLS estimators for the coefficients $\beta$ based on the functional form the heteroskedasticity in LPMs. **[4 points]**
 
 ***
 
-$$y: valueh \text{ i.e., total home value} \\
-x_1: hhincome \text{ i.e., total household income }$$
-
-We have chosen to treat house value as outcome variable and household income as explanatory variable.
-
-"HHINCOME reports the total money income of all household members age 15+ during the previous year. The amount should equal the sum of all household members' individual incomes, as recorded in the person-record variable INCTOT. The persons included were those present in the household at the time of the census or survey. People who lived in the household during the previous year but who were no longer present at census time are not included, and members who did not live in the household during the previous year but who had joined the household by the time of the census or survey, are included. For the census, the reference period is the previous calendar year; for the ACS and the PRCS, it is the previous 12 months.
-
-Note that household income differs from family income, which is reported in FTOTINC. The family income variable only reports the incomes of household members related to the head, while HHINCOME includes the incomes of all household members."
-
-"VALUEH reports the value of housing units in contemporary dollars."
+$$\text{ANSWER 3}$$
 
 \newpage
 
-**4.** Provide summary statistics (number of observations, mean, standard deviation, minimum and maximum) for your two variables described in part (3). **Calculate these summary statistics only for the sample that you use in part (6).**  This means that your sample size for each variable should match the sample size in part (6).  To do this, you first run the regression in part (6).  Then immediately after you run the regression, you use the summarize command and an “if” statement as follows:
+  4. Given the fact that we are estimating FGLS estimator in a LPM, what is the primary issue that you would encounter obtaining the FGLS estimators using the procedure you describe above. **[2 points]**
 
-    regress y x
-    summarize y x if e(sample)==1
+***
 
-Be sure to display the summary statistics **in a neatly formatted table** (i.e. do NOT simply copy and paste Stata output).  **(2 points)**
+In LPM, the outcome variable can only take one of two values (0 and 1) and there is always heteroskedasticity.
 
-You can refer these: 
-  
-  * [Using outreg2 to report regression output, descriptive statistics, frequencies and basic crosstabulations](https://www.princeton.edu/~otorres/Outreg2.pdf)
-  
-  * In Stata type: `help outreg2`
+$$\text{ANSWER 4}$$
+
+\newpage
+
+**Question 2 [18 points total]**
+
+You are trying to measure the historical black-white gap in infant mortality using county-level data on infant mortality rates (*IMR*, the number of deaths of those aged 1 or less per 1,000 live births), the proportion of the population that is black (*pctblack*), average *income* levels (in thousands of dollars), and average years of *education.*  You have data from all US counties in 1920.  
+
+$IMR= \beta_0 + \beta_1 pctblack + \beta_2 income + \beta_3 education + u$
+
+Here, $\beta_1$ is your measure of the black-white gap in infant mortality and you expect that $\beta_1 > 0$, i.e. that the infant mortality rate is higher in counties with a larger black population (all else equal).
+
+  1. You are worried that *IMR* is reported with error.  In particular, some have suggested that IMR might actually be overreported for blacks.  Researchers suggest that though deaths were accurately reported (perhaps because families were required to obtain a death certificate for a ceremonial burial), births were severely underreported for blacks.  Therefore the ratio deaths to births is possibly inflated for blacks.  In light of this, do you think the estimate $\hat{\beta_1}$ will be biased?  If there is bias, is it positive or negative?  Explain. [4 points]
 
 
 ***
 
-    summarize valueh hhincome if e(sample)==1
-
-$$\text{ANSWER 4}\\
-\text{REQUIRES outreg2 COMMAND or similar}$$
+$$\text{ANSWER 2.1}$$
 
 \newpage
 
-**5.** Create a scatterplot of you two variables. You may copy and paste your graph from Stata, but please make sure your graph is clearly formatted (e.g. that the axes are labeled clearly with labels that make sense – **not** just nonsensical variable names).  **(2 points)**
+**Question 2 (16 points total)**
 
-***
-
-`twoway (scatter valueh hhincome) (lfit valueh hhincome) , xtitle("Total Household Income") ytitle("Total value of housing units")`
-
-![](Stata.Q5.PNG)
-
-\newpage
-
-**6.** Regress your outcome variable on your explanatory variable. Copy paste Stata output here. Report your results in an equation (like in the lecture notes) AND in a **formatted table** using outreg2. **(2 points)**
-
-***
-
-    regress valueh hhincome
-    summarize valueh hhincome if e(sample)==1
-    regress valueh hhincome [fw = perwt]
-    summarize valueh hhincome if e(sample)==1
-
-![](Stata.Q6.PNG)
-
-![](Stata.Q6.pw.PNG)
-
-$$\text{ANSWER 6}\\
-\text{REQUIRES outreg2 COMMAND}$$
-
-\newpage
-
-**7.** Interpret the slope coefficient and the intercept. **(2 points)**
-
-***
-
-$$\text{ANSWER 7}$$
-
-\newpage
-
-**8.** With respect to your results in the table in part (6), explain how there will be a omitted variables bias?  Do you think the bias will be positive or negative? **Explain. (2 points)**
-
-***
-
-I think *costelec* is positively correlated with *valueh* and with *hhincome* leading to a positive bias.
-
-Big expensive house, high cost of electricity, higher price, higher income to afford.
-
-$$\text{ANSWER 8}$$
-
-\newpage
-
-**9.** Choose another **continuous** variable to add to your regression from your dataset $(x_2)$.  Briefly describe this new variable (including units of measurement). **(1 point)**
-
-***
-
-$$x_2: costelec \text{ i.e., Annual household cost of electricity}$$
-
-"COSTELEC gives the annual electricity cost for each housing unit (rented or owned)"
-
-dollars
-
-$$\text{ANSWER 9}$$
-
-\newpage
-
-**10.** Provide a neatly formatted table with summary statistics for **all** three variables: variables you chose in part (3) and the one you chose in part (9): $y$, $x_1$ $x_2$.
-
-**Calculate these summary statistics only for the sample that you use in part (14).**  This means that your sample size for each variable should match the sample size in part (14).  Because you are including a new variable, this may change your sample size from part(6) (and part(4))  so you may need to recalculate summary statistics even for $y$ and $x_1$. **(2 points)**
-
-***
-
-$$\text{ANSWER 10}$$
-
-\newpage
-
-**11.** Write down your multiple regression equation (including your new variable).  See example below; **replace the $x$s and $y$s with your variable names. (1 point)**
-
-$$y = \beta_0 + \beta_1 x_1 + \beta_1 x_2 + u$$
+  2. You are also worried that you are leaving out an important variable: health care access.  Your reasoning is that counties without adequate access to health care will have higher *IMR* and in general, health care access is lower in counties with a larger black population (higher *pctblack*).  If this is the case, would $\hat{beta_1}$ be an over- or underestimate of $\beta_1$?  Explain. [3 points]
 
 ***
 
 
-$$valueh = \beta_0 + \beta_1 hhincome + \beta_1 costelec + u$$
+$$\text{ANSWER 2.2}$$
 
 \newpage
 
-**12.** Does your new variable $(x_2)$ help you reduce some of the omitted variables bias that you discuss in part (8)? **Explain. (2 points)**
+  3. To deal with omitted variable bias, you also collect data on the number of physicians per capita in each county. Is this a good proxy variable for health care access based on the three assumptions we discussed in class?  (Discuss each assumption in turn. If you feel that an assumption is likely to fail then give at least one example of the case when an assumption is likely to fail. You must discuss these assumptions in terms of the variables used in the regression analysis, not in terms of $x$,$y$,$x^*$ *etc*..) **[5 points]**
 
 ***
 
-$$\text{ANSWER 12}$$
+$$2.3$$
 
 \newpage
 
-**13.** Run the regression in part (11).  Copy paste your Stata output here. Report your results in equation format. Interpret each coefficient and indicate whether or not it is statistically significant (for both $\hat{\beta_1}$ and $\hat{\beta_2}$). [You do not need to interpret the intercept, $\hat{\beta_0}$.) **(2 points)**
-
-***
-
-$$\text{ANSWER 13}$$
-
-\newpage
-
-**14.** 	Now run a new regression where you characterize $y$ in natural log form rather than levels, i.e.
-
-$$\ln (y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + u$$
-
-[*Hint: to do this, you will need to generate a new variable that is the natural log of y.  For example, you might call this new variable lny.*] Copy paste your Stata output here. Report your results in equation format.   Interpret the coefficients $\hat{\beta_1}$ and $\hat{\beta_2}$. If there is no meaningful interpretation of the coefficients, please explain. **(2 points)**
-
-***
-
-$$\ln (valueh) = \beta_0 + \beta_1 hhincome + \beta_2 costelec + u$$
-
-$$\text{ANSWER 14}$$
-
-\newpage
-
-**15.** 	Now run a regression where you include a quadratic term in either $x_1$ or $x_2$ (but with $y$ **in levels**, as in part (11)).  For example, if you choose to include a quadratic term in $x_2$, your regression will be
-
-$$y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_2^2+ u$$
-
-[*Hint: To do this, you will need to generate a new variable that is the square of your explanatory variable of choice.  In this example, you might call this new variable x2sq.*]  Copy paste your Stata output here. Report your results in equation format. What is the association between your outcome and your variable that includes the quadratic term, **at the sample mean of that variable**? Explain this association in words. **(2 points)**
-
-***
-
-$$valueh = \beta_0 + \beta_1 hhincome + \beta_2 costelec + \beta_3 hhincome^2 + u$$
-
-$$\text{ANSWER 15}$$
-
-\newpage
-
-**16.**	Create a new formatted table using outreg2 that includes all of your regression results from parts (6), (11), (14), and (15) and paste it here.  The final product should be a table with 4 columns:
-
-  1. Column 1 has only one explanatory variable, $x_1$ (from question 6)
-	2. Column 2 has two explanatory variables, $x_1$ and $x_2$ (from question 11)
-	3. Column 3 has two explanatory variables, $x_1$ and $x_2$ and the dependent variable is ln⁡(y) (from question 14)
-	4. Column 4 has three explanatory variables, $x_1$, $x_2$ and $x_2^2$.  (The dependent variable is $y$.) (from question 15)
-
-**Be sure that your table is formatted clearly, with column numbers and easily identifiable entries (e.g. no mysterious variable names).  (2 points)**
-
-***
-
-$$\text{ANSWER 16}$$
-
-\newpage
-
-Choose a **binary explanatory** variable to add to your regression from your dataset.  If you do not have a binary variable in your dataset, create one from a continuous or categorical variable.  For example, if you have data on income (continuous), use it to create a dummy variable (e.g. high or low income). Or, if you have data on school type (private, public, religious), you might create a dummy variable that is 1 for private or religious and 0 for public.
-If you want, you can also have a binary dependent variable, but this is NOT required.  However, if you use a binary dependent variable, you must be careful when interpreting coefficients – specifically, you’ll need to interpret everything in terms of percentage point changes in the probability that your dependent variable is equal to 1.
-
-**17.** Copy and paste your variables description from previous parts and add the description of this new variable. **(2 points)**
-
-***
-
-$$\text{ANSWER 17}$$
-
-\newpage
-
-**18.** Add the summary statistics for your new variable to the summary statistics table from before and display here. You must provide a neatly formatted table. **(2 points)**
-
-***
-
-$$\text{ANSWER 18}$$
-
-\newpage
-
-**19.**	Create a separate histogram of your outcome variable for each value of your binary variable using Stata’s histogram command with the “by” option.  For example, your code might be: `histogram y, by (x3)` where $y$ is your dependent variable and $x3$ is your binary variable. **(2 points)**
-
-***
-
-$$\text{ANSWER 19}$$
-
-\newpage
-
-**20.** Write down your multiple regression equation (including your new binary variable $x$ 3).   
-Note: you may either add your new binary variable to your regression from (11) OR you can replace one of your continuous variables with your new binary variable (if, for example, you used one of your previous continuous variables to create a new binary variable).  **Make sure your regression contains at least one continuous variable and one binary variable. (2 points)**
+  4. Now assume that the number of physicians per capita **IS** a good proxy for health care access. How would you use this proxy variable?  How does this help you deal with the omitted variable bias discussed in part (b)? **[3 points]**
 
 
 ***
 
-$$\text{ANSWER 20}$$
+$$2.4$$
 
 \newpage
 
-**21.**	Run the regression in part (20).  Copy paste your Stata output here. Report your results in equation format. Interpret the coefficient on the **binary variable** and explain whether or not it is statistically significant. **(2 points)**
+  5. Now let’s say that you do not have data on all US counties but instead have data only on counties that chose to collect *IMR* and race data from residence (roughly about 80% of counties in 1920).  From your background research, it seems that counties with high proportions of black residents are less likely to collect *IMR* data. Should you be worried about bias and inconsistency due to sample selection? Explain. **[3 points]**
 
 ***
 
-$$valueh = \beta_0 + \beta_1 hhincome + \beta_2 costelec + \beta_3 collegegrad + u$$
-
-$$\text{ANSWER 21}$$
-
-\newpage
-
-**22.** 	Create a scatterplot that shows the relationship between your dependent variable and one continuous explanatory variable, separately for when your binary variable is equal to 1 and when it is equal to 0. **Make sure your scatterplot is very clear and easy to read – it should have different markers for when your binary variable is equal to 1 and when it is equal to 0 and it should have a legend. (2 points)**
-
-Hint: The Stata code might be helpful:
-
-    twoway (scatter y x1 if x3==1) (scatter y x1 if x3==0, ms(X)), legend(label(1 "High Income") label(2 "Low Income"))
-    
-where $y$ is your dependent variable, $x1$ is your continuous variable and $x3$ is your binary variable.
-
-***
-
-$$\text{ANSWER 22}$$
-
-\newpage
-
-**23.** 	Create two linear fit plots that shows the relationship between your dependent variable and your continuous variable (the same one from part (22)), separately for when your binary variable is equal to 1 and when it is equal to 0 (but on the SAME graph).  Make sure your linear fit plots are very clear and easy to read – it should have different line styles for when your binary variable is equal to 1 and when it is equal to 0 and it should have a legend.
-
-  For example, your code might be `twoway (lfit y x1 if x3==1) (lfit y x1 if x3==0, lp(-)), legend(label(1 "High Income") label(2 "Low Income"))` where y is your dependent variable, x1 is your continuous variable and x3 is your binary variable.
-
-Based on your plot, does it look like the relationship between your dependent variable and your continuous explanatory variable differs, depending on your binary variable? **(2 points)**
-
-***
-
-$$\text{ANSWER 23}$$
-
-\newpage
-
-**24.** Now run a new regression where you allow the effect of the continuous explanatory variable (the same one from parts (22) and (23)) to differ, depending on the value of your binary variable. Hint: You might have to use an interaction term. Copy paste your Stata output here. Report your results in equation format. **(2 points)**
-
-***
-
-$$\text{ANSWER 24}$$
-
-\newpage
-
-**25.** Is the interaction term in part (24) statistically significant?  What does this tell you about the relationship between your dependent variable and your continuous explanatory variable? **(2 points)**
-
-***
-
-$$\text{ANSWER 25}$$
-
-\newpage
-
-**26.**	According to your regression results in part (24), what is the association between your dependent variable and your continuous explanatory variable when your binary variable is equal to 1?  What about when your binary variable is equal to 0?  Are these associations statistically significant? [Hint: you may need to use Stata’s lincom command.]  **(2 points)**
-
-***
-
-$$\text{ANSWER 26}$$
-
-\newpage
-
-**27.** Think about the multiple regression equations from before [i.e from parts 11, 14, 15, 21 and 24] and write down the one that makes most sense to you. It can include binary variables, but it does not have to. Other than including multiple explanatory variables, there is no restriction on what type of variables you include. **[1 point]**
-
-***
-
-$$\text{ANSWER 27}$$
-
-\newpage
-
-**28.**	Estimate the multiple regression equation in part (27) and report the results here. Don’t forget to specify robust standard errors if your sample size is large enough. **[1 point]**
-
-***
-
-$$\text{ANSWER 28}$$
-
-\newpage
-
-**29.** Do you think the **dependent** variable in your regression from part (28) is reported with error? Explain briefly. If you think it is measured with error, explain whether you think that measurement error will lead to bias and whether that bias will lead you to under- or overestimate the true effect. *Regardless of whether you think the measurement error causes bias*, what effect does measurement error in your dependent variable have on the precision of your estimates? **[2 points]**
-
-***
-
-If measurement error in valueh is correlated with any of explanatory covariates then we have bias.
-
-$$\text{ANSWER 29}$$
-
-\newpage
-
-**30.** Do you think the **explanatory** variables in your regression from part (28) are reported with error?  Explain briefly. If some or all variables in your regression are measured with error, explain whether you think that measurement error will lead to bias and whether that bias will lead you to under- or overstimate the true effect. **[2 points]**
-
-***
-
-$$\text{ANSWER 30}$$
-
-\newpage
-
-**31.** Do you think your regression estimates suffer from sample selection bias?  Explain. (For this part, do not discuss missing data.) **[2 points]**
-
-***
-
-$$\text{ANSWER 31}$$
-
-\newpage
-
-**32.**	Do you have missing data for any of the observations in your regression sample?  Do you think the data are missing at random? Will the missing data cause bias? **[2 points]**
-
-To help see whether the data are missing at random (and thus whether or not the missing data are likely to cause bias), create a dummy variable that is equal to 1 when data is missing and that is 0 when the data are not missing (for each variable in your regression).  Then regress that dummy variable on other explanatory variables. 
-
-For example, if you have data on income, age, and race, you would create the following dummy variables:
-
-    gen missing_inc = (income==.)
-    gen missing_age = (age==.)
-    gen missing_race = (race==.)
-
-and then you would regress each of those on the other variables, e.g.
-
-    reg missing_inc age i.race
-
-If income is (statistically significantly) more likely to be missing for older (or younger) people or for people of a specific race, then the data are not missing at random and will likely cause bias. (Clearly this will only be helpful for observations where you have missing values for some but not all variables.)
-
-Note: in order to show your results concisely, use the outreg2 command.  Continuing the example above, this would mean doing the following:
-
-    reg missing_inc age i.race
-    outreg2 using missingdata, bdec(3) word excel replace 
-    reg missing_age i.race income
-    outreg2 using missingdata, bdec(3) word excel append 
-    reg missing_race age income
-    outreg2 using missingdata, bdec(3) word excel append
-
-**Copy and paste only the final formatted table here.**
-
-
-***
-
-    gen missing_hhincome = (hhincome==.)
-    gen missing_costelec = (costelec==.)
-
-$$\text{ANSWER 32}$$
-
-\newpage
-
-**33.**	Does your regression sample contain outliers and/or influential observations?  In order to answer this question, you should provide some supporting evidence (copy and paste here). This might include things like scatterplots, histograms, detailed summary statistics, or regression results with and without certain observations. Which regression results – with or without the outliers/influential points – do you think are more believable? Explain. **[2 points]**
-
-***
-
-$$\text{ANSWER 33}$$
-
-\newpage
-
-**34.** Use the Breusch-Pagan Test to test for heteroscedasticity.  Paste the Stata output for the regression you use to perform the test and state your conclusion here.  Hint: when you run the regression to calculate the residuals, you should NOT specify robust standard errors. **[2 points]**
-
-***
-
-$$\text{ANSWER 34}$$
-
-\newpage
-
-**35.**	Use the two versions of the White test to test for heteroscedasticity.  You should use the built-in Stata command to perform these tests.  Paste the Stata output for the tests and state your conclusions here. **[2 points]**
-
-***
-
-$$\text{ANSWER 35}$$
-
-\newpage
-
-Variable: "COSTELEC"
-
-Name:	COSTELEC
-
-Label:	Annual electricity cost
-
-Variable Text:	COSTELEC for 1970 reports each rented housing unit's annual electricity cost, excluding amounts included with contract rent payments. For later years, COSTELEC gives the annual electricity cost for each housing unit (rented or owned), again excluding amounts included in contract rent or other types of payments. For 1970 and 1980, units within the universe that used no electricity can be identified. Beginning in 1990, the form combines the categories "no charge" and "no electricity used."
-
-COSTELEC amounts for renters are part of RENTGRS. Census Bureau research comparing respondents' reported costs with utility company records indicates that respondents tend to overstate their costs.
-
-In 1970, the universe for the U.S. Census samples specifies renter-occupied units rented for cash rent, not one-family houses on 10+ acres and not group quarters; however in the Puerto Rican census of 1970, this specification is for renter-occupied units rented for cash rent, not one-family houses on 3+ cuerdas, and not group quarters.
-
-Amounts are expressed in contemporary dollars, and users studying change over time must adjust for inflation (See INCTOT for Consumer Price Index adjustment factors). The exception is the ACS/PRCS multi-year files, where all dollar amounts have been standardized to dollars as valued in the final year of data included in the file (e.g., 2007 dollars for the 2005-2007 3-year file). Additionally, more detail may be available than exists in the original ACS samples.
-
-User Note:
-
-The traditional unit of land area in Puerto Rico is the cuerda. The cuerda is equal to about 3930 square meters, 4700 square yards, or 0.971 acres. Because the cuerda and the acre are so close to being equal, they are often treated informally as being equal. Mainlanders sometimes call the unit the "Spanish Acre." The IPUMS has preserved the units for the mainland U.S. as acres and Puerto Rico as cuerdas.
-
-Concept:	Economic Characteristic Variables -- HOUSEHOLD
-
-Start Position:	71
-
-End Position:	74
-
-Width:	4
-
-Variable Format:	numeric
-
-Implied Decimal Places:	0
-
-
-Variable: "HHINCOME"
-
-Name:	HHINCOME
-
-Label:	Total household income
-
-Variable Text:	HHINCOME reports the total money income of all household members age 15+ during the previous year. The amount should equal the sum of all household members' individual incomes, as recorded in the person-record variable INCTOT. The persons included were those present in the household at the time of the census or survey. People who lived in the household during the previous year but who were no longer present at census time are not included, and members who did not live in the household during the previous year but who had joined the household by the time of the census or survey, are included. For the census, the reference period is the previous calendar year; for the ACS and the PRCS, it is the previous 12 months.
-
-Note that household income differs from family income, which is reported in FTOTINC. The family income variable only reports the incomes of household members related to the head, while HHINCOME includes the incomes of all household members.
-
-Amounts are expressed in contemporary dollars, and users studying change over time must adjust for inflation (See INCTOT for Consumer Price Index adjustment factors). The exception is the ACS/PRCS multi-year files, where all dollar amounts have been standardized to dollars as valued in the final year of data included in the file (e.g., 2007 dollars for the 2005-2007 3-year file). Additionally, more detail may be available than exists in the original ACS samples.
-
-User Note: ACS respondents are surveyed throughout the year, and amounts do not reflect calendar year dollars. While the Census Bureau provides an adjustment factor (available in ADJUST), this is an imperfect solution. See the ACS income variables note for further details.
-
-Concept:	Economic Characteristic Variables -- HOUSEHOLD
-Start Position:	87
-
-End Position:	93
-
-Width:	7
-
-Variable Format:	numeric
-
-Implied Decimal Places:	0
-
-Coder
-
-Variable: "VALUEH"
-
-Name:	VALUEH
-
-Label:	House value
-
-Variable Text:	VALUEH reports the value of housing units in contemporary dollars. For 1930, 1940, and from 2008 onward, VALUEH is a continuous variable. The other years report the midpoint of an interval; see codes and frequencies for intervals.
-
-User Note: Universe shifts and changing methods of determining value complicate use of this variable for comparisons across years. Furthermore, dollar amounts were intervalled differently for each year, and the top codes changed. Users must adjust for the effects of inflation; see INCTOT for Consumer Price Index adjustment factors.
-
-User Note: The traditional unit of land area in Puerto Rico is the cuerda. The cuerda is equal to about 3930 square meters, 4700 square yards, or 0.971 acres. Because the cuerda and the acre are so close to being equal, they are often treated informally as being equal. Mainlanders sometimes call the unit the "Spanish Acre." The IPUMS has preserved the units for the mainland U.S. as acres and Puerto Rico as cuerdas.
-
-Concept:	Economic Characteristic Variables -- HOUSEHOLD
-Start Position:	94
-
-End Position:	100
-
-Width:	7
-
-Variable Format:	numeric
-
-Implied Decimal Places:	0
-
-Categories
-
-Value	Label
-
-0000000	$0 (1940)
-
-0000250	Less than $500
-
-0000500	Less than $999
-
-0001000	Less than $2,000
-
-0001500	$2,000- 1,999
-
-0002500	Less than $5,000
-
-0003500	$3,000- 3,999
-
-0004000	$3,000- 4,999
-
-0004500	$4,000- 4,999
-
-0005000	Less than $10,000
-
-0006250	$5,000 - 7,499
-
-0008750	$7,500 - 9,999
-
-0012500	$10,000 - 14,999
-
-0011250	$10,000 - 12,499
-
-0013750	$12,500 - 14,999
-
-0017500	$15,000 - 19,999
-
-0016250	$15,000 - 17,499
-
-0018750	$17,500 - 19,999
-
-0025000	$20,000- 29,999
-
-0022500	$20,000 - 24,999
-
-0021250	$20,000 - 22,499
-
-0023750	$22,500 - 24,999
-
-0030000	$25,000 - 34,999
-
-0026250	$25,000 - 27,499
-
-0027500	$25,000 - 29,999
-
-0028750	$27,500 - 29,999
-
-0032500	$30,000 - 34,999
-
-0031250	$30,000- 32,499
-
-0033750	$32,500- 34,999
-
-0035000	$35,000+
-
-0042500	$35,000 - 49,999
-
-0037500	$35,000 - 39,999
-
-0036250	$35,000- 37,499
-
-0038750	$37,500- 39,999
-
-0045000	$40,000 - 49,999
-
-0042499	$40,000 - 44,999
-
-0047500	$45,000 - 49,999
-
-0050000	$50,000+
-
-0055000	$50,000 - 59,999
-
-0052500	$50,000 - 54,999
-
-0057500	$55,000 - 59,999
-
-0065000	$60,000 - 69,999
-
-0062500	$60,000 - 64,999
-
-0067500	$65,000 - 69,999
-
-0075000	$70,000 - 79,999
-
-0072500	$70,000 - 74,999
-
-0077500	$75,000 - 79,999
-
-0087500	$75,000 - 99,999
-
-0085000	$80,000 - 89,999
-
-0095000	$90,000 - 99,999
-
-0100000	$100,000+
-
-0112500	$100,000 - 124,999
-
-0137500	$125,000 - 149,999
-
-0175000	$150,000 - 199,999
-
-0162500	$150,000 - 174,999
-
-0187500	$175,000 - 199,999
-
-0200000	$200,000+
-
-0225000	$200,000 - 249,999
-
-0275000	$250,000 - 299,999
-
-0350000	$300,000 - 399,999
-
-0400000	$400,000+
-
-0450000	$400,000 - 499,999
-
-0625000	$500,000 - 749,999
-
-0875000	$750,000 - 999,999
-
-1000000	$1,000,000+
-
-9999998	Missing
-
-9999999	N/A
-
-Variable: "EDUCD"
-
-Name:	EDUCD
-
-Label:	Educational attainment [detailed version]
-
-Variable Text:	EDUC indicates respondents' educational attainment, as measured by the highest year of school or degree completed. Note that completion differs from the highest year of school attendance; for example, respondents who attended 10th grade but did not finish were classified in EDUC as having completed 9th grade. For additional detail on grade attendance, see GRADEATT as well as the detailed version of HIGRADE.
-
-Concept:	Education Variables -- PERSON
-
-Start Position:	128
-
-End Position:	130
-
-Width:	3
-
-Variable Format:	numeric
-
-Implied Decimal Places:	0
-
-Categories
-
-Value	Label
-
-000	N/A or no schooling
-
-001	N/A
-
-002	No schooling completed
-
-010	Nursery school to grade 4
-
-011	Nursery school, preschool
-
-012	Kindergarten
-
-013	Grade 1, 2, 3, or 4
-
-014	Grade 1
-
-015	Grade 2
-
-016	Grade 3
-
-017	Grade 4
-
-020	Grade 5, 6, 7, or 8
-
-021	Grade 5 or 6
-
-022	Grade 5
-
-023	Grade 6
-
-024	Grade 7 or 8
-
-025	Grade 7
-
-026	Grade 8
-
-030	Grade 9
-
-040	Grade 10
-
-050	Grade 11
-
-060	Grade 12
-
-061	12th grade, no diploma
-
-062	High school graduate or GED
-
-063	Regular high school diploma
-
-064	GED or alternative credential
-
-065	Some college, but less than 1 year
-
-070	1 year of college
-
-071	1 or more years of college credit, no degree
-
-080	2 years of college
-
-081	Associate's degree, type not specified
-
-082	Associate's degree, occupational program
-
-083	Associate's degree, academic program
-
-090	3 years of college
-
-100	4 years of college
-
-101	Bachelor's degree
-
-110	5+ years of college
-
-111	6 years of college (6+ in 1960-1970)
-
-112	7 years of college
-
-113	8+ years of college
-
-114	Master's degree
-
-115	Professional degree beyond a bachelor's degree
-
-116	Doctoral degree
-
-999	Missing
+$$2.5$$
