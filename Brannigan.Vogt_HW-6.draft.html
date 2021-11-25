@@ -205,6 +205,8 @@ Var(y│x) = x\beta - (x\beta)^2\]</span></p>
 </ol>
 <hr />
 <p>In LPM, the outcome variable can only take one of two values (0 and 1) and there is always heteroskedasticity.</p>
+<p>The weights are estimated and the functional form of thee weights was assumed. (i.e., function form of variance, functional form of heteroskedasticty)</p>
+<p>Assuming <span class="math inline">\(E[u | x] = E[u] = 0\)</span> and proper specification of h_i, then estimation FGLS unbiased.u</p>
 <p><span class="math display">\[\text{ANSWER 4}\]</span></p>
 <div style="page-break-after: always;"></div>
 <p><strong>Question 2 [18 points total]</strong></p>
@@ -227,19 +229,20 @@ Var(y│x) = x\beta - (x\beta)^2\]</span></p>
 <li>To deal with omitted variable bias, you also collect data on the number of physicians per capita in each county. Is this a good proxy variable for health care access based on the three assumptions we discussed in class? (Discuss each assumption in turn. If you feel that an assumption is likely to fail then give at least one example of the case when an assumption is likely to fail. You must discuss these assumptions in terms of the variables used in the regression analysis, not in terms of <span class="math inline">\(x\)</span>,<span class="math inline">\(y\)</span>,<span class="math inline">\(x^*\)</span> <em>etc</em>..) <strong>[5 points]</strong></li>
 </ol>
 <hr />
-<p><span class="math display">\[2.3\]</span></p>
+<p><span class="math display">\[\text{ANSWER 2.3}\]</span></p>
 <div style="page-break-after: always;"></div>
 <ol start="4" style="list-style-type: decimal">
 <li>Now assume that the number of physicians per capita <strong>IS</strong> a good proxy for health care access. How would you use this proxy variable? How does this help you deal with the omitted variable bias discussed in part (b)? <strong>[3 points]</strong></li>
 </ol>
 <hr />
-<p><span class="math display">\[2.4\]</span></p>
+<p><span class="math display">\[\text{ANSWER 2.4}\]</span></p>
 <div style="page-break-after: always;"></div>
 <ol start="5" style="list-style-type: decimal">
 <li>Now let’s say that you do not have data on all US counties but instead have data only on counties that chose to collect <em>IMR</em> and race data from residence (roughly about 80% of counties in 1920). From your background research, it seems that counties with high proportions of black residents are less likely to collect <em>IMR</em> data. Should you be worried about bias and inconsistency due to sample selection? Explain. <strong>[3 points]</strong></li>
 </ol>
 <hr />
-<p><span class="math display">\[2.5\]</span></p>
+<p>Seeing as proportion of the population that is black (<em>pctblack</em>) is the key explanatory variable of study here, we should definitely be worried about this sample selection problem where missing data is correlated with <em>pctblack</em> i.e., chance of being included in our sample depends on key explanatory variable in study here.</p>
+<p><span class="math display">\[\text{ANSWER 2.5}\]</span></p>
 
 
 

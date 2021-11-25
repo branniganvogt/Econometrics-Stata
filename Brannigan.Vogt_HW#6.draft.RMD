@@ -59,6 +59,10 @@ $$\text{ANSWER 3}$$
 
 In LPM, the outcome variable can only take one of two values (0 and 1) and there is always heteroskedasticity.
 
+The weights are estimated and the functional form of thee weights was assumed. (i.e., function form of variance, functional form of heteroskedasticty)
+
+Assuming $E[u | x] = E[u] = 0$ and proper specification of h_i, then estimation FGLS unbiased.u
+
 $$\text{ANSWER 4}$$
 
 \newpage
@@ -93,7 +97,7 @@ $$\text{ANSWER 2.2}$$
 
 ***
 
-$$2.3$$
+$$\text{ANSWER 2.3}$$
 
 \newpage
 
@@ -102,7 +106,7 @@ $$2.3$$
 
 ***
 
-$$2.4$$
+$$\text{ANSWER 2.4}$$
 
 \newpage
 
@@ -110,4 +114,6 @@ $$2.4$$
 
 ***
 
-$$2.5$$
+Seeing as proportion of the population that is black (*pctblack*) is the key explanatory variable of study here, we should definitely be worried about this sample selection problem where missing data is correlated with *pctblack* i.e., chance of being included in our sample depends on key explanatory variable in study here.
+
+$$\text{ANSWER 2.5}$$
