@@ -46,7 +46,7 @@ $\underline{\text{Observational cross-sectional data is all observed at one time
 
 $\underline{\text{Unobservable Factors}}$ we want to include unobservable factors in our model, use approximation?
 
-Always remember **correlation $\ne$ cuausation**, and remember that there many types of relationships.
+Always remember **correlation $\ne$ causation**, and remember that there many types of relationships.
 
 Let $x$ and $y$ be two random variables, suppose $y_i = \alpha + \beta x_i + u_i$ i.e., simple linear regression model.
 
