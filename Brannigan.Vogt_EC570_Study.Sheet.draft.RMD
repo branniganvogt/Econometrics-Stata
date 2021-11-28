@@ -106,9 +106,12 @@ Note that this model is still *linear in parameters* (an OLS assumption).
 $$y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_k x_k + u$$
 
 Divide regression by $h(x)$ i.e., $*\frac{1}{h_(x)}$
+
 $y^* = X^* \beta + U$
 
 Each square residual is weighted by $\frac{1}{h_i}$.
+
+# End of Study Sheet -----------------------------------------------
 
 # Some Review:
 
