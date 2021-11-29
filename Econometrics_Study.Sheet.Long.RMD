@@ -1,0 +1,431 @@
+---
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+$$\text{EC 570} \\
+\text{Fall 2021} \\
+\text{Term Study Sheet—Long} \\
+\text{Drafted: November 28 2021}$$
+
+# Lecture 1
+
+This graduate level econometrics course is designed to teach students with basic quantitative and computer skills for econometric modeling with multivariate data with emphasis on economic policy evaluation. The specific topics of the course include detailed analysis and interpretation of univariate and multivariate regression, dummy variables, measurement issues and missing data issues. 
+
+### Recommended Textbooks
+
+• J. M. Wooldridge, Econometric Analysis of Cross Section and Panel Data, 2nd ed., The MIP Press, 2010. 
+
+• W. H. Greene, Econometric Analysis, 7th ed., Pearson Education, 2012 
+
+• A. Colin Cameron and Pravin K. Trivedi, Microeconometrics: Methods and Applications. Cambridge University Press, 2005. 
+
+• J. M. Wooldridge: Introductory Econometrics (any edition)
+
+### Econometrics overview
+
+$\underline{\text{Econometrics}}$ - We need to use data and theory to answer causal questions i.e., to make statistical inferences and predictions.
+
+### Steps of Emperical Analysis
+
+1. Form a research question
+2. Formulate an econometric model
+3. Determine hypotheses
+4. Test hypotheses
+5. Interpret results
+
+$\underline{\text{Functional Form}}$ specifies how things are related e.g. linear, exponential, quadratic, constant
+
+$\underline{\text{Observational cross-sectional data is all observed at one time.}}$
+
+$\underline{\text{Unobservable Factors}}$ we want to include unobservable factors in our model, use approximation?
+
+### Causality and Notion of Ceteris Paribus
+
+$\underline{\text{Ceteris Paribus}}$: how does variable $y$ change if variable $x$ is changed but $\underline{\text{all other relevant factors are held constant.}}$
+
+Always remember **correlation $\ne$ causation**, and remember that there many types of relationships.
+
+# Lecture 2
+
+## The Least Square Problem (Simple and Multiple Regression)
+
+#### Simple Regression Model
+
+Let $x$ and $y$ be two random variables, suppose $y_i = \alpha + \beta x_i + u_i$ i.e., simple linear regression model.
+
+Then, $\widehat{y_i} = \widehat{\alpha} + x_i \widehat{\beta}$ is *as close as possible* to $y_i ~\forall~ i$
+
+So in simple linear regression, $x_i$ is a scalar random variable and $y_i$ is a scalar random variable.
+While in multiple linear regression $x_i$ is a vector of random variables and $y_i$ is a scalar random variable. In addition, $y_i$ could be a vector of random variables (seemingly unrelated regressions).
+
+#### Multiple Regression Model
+
+$$y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_k x_k + u$$
+
+$$y_i: \text{outcome variable, regressand}\\
+x_i: \text{regressor(s), covariates}$$
+
+### The Least Squares Problem: Simple Regression
+
+The $\underline{\text{ordinary least square estomator (OLS)}}$ is a value $\widehat{\alpha}, \widehat{\beta}$ that minimizes the sum of squared residuals: $SSR=\sum_{i=1}^{M}(y_i - (\widehat{\alpha} + x_i \widehat{\beta}))^2$
+
+*Notations:*
+$\overline{x} = \frac{\sum_{i=1}^{N} x_{i}}{N} ,~ \overline{y} = \frac{\sum_{i=1}^{N} y_{i}}{N} ,~ \overline{xy} = \frac{\sum_{i=1}^{N} x_{i}y_{i}}{N} ,~ \overline{x^2} = \frac{\sum_{i=1}^{N} x_{i}^2}{N} ,~ \overline{y^2} = \frac{\sum_{i=1}^{N} y_{i}^2}{N}$
+
+$$\text{minimize}\sum_{i=1}^{M}(y_i - (\widehat{\alpha} + x_i \widehat{\beta}))^2\\
+\text{FOCS give two equations with two unknowns, the FOCS are termed } \underline{'\text{Normal Equations}'}\\
+~~~~~~~~ \overline{y} - \widehat{\alpha} - \overline{x} \widehat{\beta} = 0 ~~~~~~~~ (1)\\
+~~ \overline{xy} - \overline{x} \widehat{\alpha} - \overline{x^2} \widehat{\beta} = 0 ~~~~~~~~ (2)\\
+\text{Solving normal equations in simple regression gives,}\\
+\widehat{\beta} = \frac{\overline{xy} - \overline{x}*\overline{y}}{\overline{x^2} - (\overline{x})^2} = \frac{\text{Sample Covariance}(x_i,y_i)}{\text{Sample Variance}(x_i)}, \text{ and } \widehat{\alpha} = \overline{y} - \overline{x}\widehat{\beta}.$$
+
+Remember, fitted or estimated values both have a hat but actual values have no hat.
+
+$$\underline{\text{Some Definitions}}\\
+\underline{\text{Predicted Value:}} ~ \widehat{y_i} = \widehat{\alpha} + x_i \widehat{\beta} \\
+\underline{\text{Residuals:}} ~ \widehat{u_i} = y_i - \alpha - x_i \beta \\
+\underline{\text{SSR:}} ~ = \sum_{i=1}^{N} \widehat{u_i^2}\\
+\underline{\text{Total sum of squares (SST):}} \text{ total sample variation in }  ~~~~ y_i: \sum_{i=1}^{n}(y_i - \overline{y})^2 \\
+\underline{\text{Explained sum of squares (SSE):}} \text{total sample variation in } \widehat{y_i}, \text{ i.e., the explained variation: } \sum_{i=1}^{n}(\widehat{y_i} - \overline{y})^2\\
+\underline{\text{Sum of squared residuals/ Residual sum of squres (SSR):}} \text{ total sample variation in } \widehat{u_i}, \text{ i.e., the unexplained variation:} \sum_{i=1}^{n} \widehat{u_i^2}$$
+
+Note that we can show $\overline{\widehat{y}} = \overline{y}$
+
+$$\underline{\text{Some Properties of OLS on any sample data}}\\
+1. \text{ The average of the OLS residuals is 0: } ~~~~ \frac{1}{n} \sum_{i=1}^{n} \widehat{u_i} = 0 \\
+2. \text{ The sample covariance between regressors and OLS residuals is 0: } ~~~~ \sum_{i=1}^{n} x_i \widehat{u_i} = 0 \\
+3. \text{ The point } (\overline{x}, \overline{y}) \text{ is always on the regression line: } ~~~~ \overline{y} = \widehat{\alpha} + \widehat{\beta}\overline{x} \\
+4. ~ SST= SSR + SSE: ~ \sum_{i=1}^{n}(y_i - \overline{y})^2 = \sum_{i=1}^{N} \widehat{u_i^2} + \sum_{i=1}^{n}(\widehat{y_i} - \overline{y})^2$$
+
+**All of the sample variation in $y_i$ can be broken down into explained (or predicted) variation and unexplained variation.**
+
+### Goodness of fit in Simple Regression
+
+$\underline{\text{Regression R-squred:}}$ the **fraction of the variation in $y$ that is explained by variation in $x$.** (i.e., the proportion that is predictable)
+
+$$R^2 = \frac{SSE}{SST} = \frac{\sum_{i=1}^{n}(\widehat{y_i}-\overline{y})^2}{\sum_{i=1}^{n}(y_i - \overline{y})^2} = 1 - \frac{SSR}{SST} = 1 - \frac{\sum_{i=1}^{n}(\widehat{u_i})^2}{\sum_{i=1}^{n}(y_i - \overline{y})^2}\\
+R^2 \in [0,1] \text{ a.k.a. always between no fit and perfect fit.}\\
+R^2=0 \text{ i.e, } SSE=0 \text{ means no linear relationship between } x \text{ and } y.\\
+R^2=1 \text{ i.e, } SSE=SST \text{ means perfectly linear relationship between } x \text{ and } y.$$
+
+### The Least Squares Problem: Multiple Regression
+
+$$\text{"Regression with random variables"} \\
+\text{"covariates and outcomes"} \\
+\text{"K parameters, K unknowns, K slopes"} \\
+\text{Measure Linear relation w/ }R^2 \\
+\text{RANK CONDITION IS THAT } (X^TX) \text{ IS INVERTIBLE}. \text{i.e., columns of } X \text{ are linearly independent.} \\
+\text{"Goodness of fit" } R^2 \in [0,1], ~ R^2=\frac{SSE}{SST} \\
+x_i = [1, x_{i2},\dots] \\
+(X^TX)\hat{\beta}=X^TY \\
+\text{Want } \hat{\beta} \\
+(X^TX)^{-1} \rightarrow \text{ Rank Condtion must be satisfied.}\\
+X_i \text{ Data matrix} \\
+Y_i \text{ Prediction collumn vector} \\
+\text{Projection Matrix: } P_X = X(X^TX)^{-1}X^T \\
+P_X \text{ property: } \text{ Symmetric: } P_X^T = P_X \\
+P_X \text{ property: } \text{ Idempotent: } P_XP_X = P_X \\
+P_X \text{ property: } \mathbb{R}^n\rightarrow\mathbb{R}^{n-1}\\
+\text{Vector of residuals } \hat{U} \\
+\hat{U} = Y - \hat{Y} \\
+\hat{U} = Y - X(X^TX)^{-1}X^TY \\
+\hat{U} = (I_N - P_X)Y + M_XY\\
+\text{Residual Matrix }M_X \\
+M_X \text{ property: } \text{ Symmetric: } M_X^T = M_X \\
+M_X \text{ property: } \text{ Idempotent: } M_XM_X = M_X \\
+M_XX=0 \\
+M_XP_X=0$$
+
+#### Special notes on $R^2$ for multiple regression
+
+Remember that adding more covariates *always* increases $R^2$; therefore, $R^2$ is NOT a good measure to determine whether to add an additional covariate. Must consider whether it truly has an effect on $y$.
+
+Always remember, $R^2$ still tells you nothing about whether the $x$s and $y$ are *causally* related.
+
+# Lecture 3
+
+$$\text{Messy Lecture 3 Notes}\\
+E(u|x) = E(u) \rightarrow Cov(x,u)=E(xu)=0 \\
+E(u) = 0 \\
+y = \beta_0 + \beta_1 x + u \rightarrow u = y - (\beta_0 + \beta_1 x) \\
+\text{So the two population conditions or moments are} \\
+E(xu) = E[x(y-\beta_0 - \beta_1x)] = 0 \\
+E(u) = E(y - \beta_0 - \beta_1x) = 0 \\
+\text{The sameple counter parts are} \\
+n^{-1}\sum_{i=1}^{n}x_i (y_i - \hat{\beta_0} - \hat{\beta_1}x_i) = 0 \\
+n^{-1}\sum_{i=1}^{n} (y_i - \hat{\beta_0} - \hat{\beta_1}x_i) = 0 \\
+\text{Note } n^{-1}=\frac{1}{n} \\
+\text{METHOD OF MOMENTS: use sample counterparts (of the population moments) to define estimators.} \\
+\text{With these equations and a sample of data } (x_i\text{'s and }y_i\text{'s), we can calculate }\\
+\hat{\beta_0} \text{ and } \hat{\beta_1}, \text{ our best guesses for the true values } \beta_0 \text{ and } \beta_1.\\
+\text{Start with second moment:} \\
+n^{-1}\sum_{i=1}^{n} (y_i - \hat{\beta_0} - \hat{\beta_1}x_i) = 0 \\
+\overline{y} - \hat{\beta_0} - \hat{\beta_1}\overline{x} = 0 \rightarrow \hat{\beta_0} = \overline{y} - \hat{\beta_1} \overline{x}$$
+
+## Using Method of Moments to derivive formula for OLS estimator
+
+$$E(u|x) = E(u) \rightarrow Cov(x,u)=E(xu)=0 \\
+E(u) = 0 \\
+y = \beta_0 + \beta_1 x + u \rightarrow u = y - (\beta_0 + \beta_1 x)$$
+So the two population conditions or moments are $E(xu) = E[x(y-\beta_0 - \beta_1x)] = 0$ and $E(u) = E(y - \beta_0 - \beta_1x) = 0$
+
+The sample counterparts are $n^{-1}\sum_{i=1}^{n}x_i (y_i - \hat{\beta_0} - \hat{\beta_1}x_i) = 0$ and $n^{-1}\sum_{i=1}^{n} (y_i - \hat{\beta_0} - \hat{\beta_1}x_i) = 0$
+
+Note $n^{-1}=\frac{1}{n}$
+
+$$\text{METHOD OF MOMENTS: use sample counterparts (of the population moments) to define estimators.} \\
+\text{With these equations and a sample of data } (x_i\text{'s and }y_i\text{'s), we can calculate }\\
+\hat{\beta_0} \text{ and } \hat{\beta_1}, \text{ our best guesses for the true values } \beta_0 \text{ and } \beta_1.\\
+\text{Start with second moment:} \\
+n^{-1}\sum_{i=1}^{n} (y_i - \hat{\beta_0} - \hat{\beta_1}x_i) = 0 \\
+\overline{y} - \hat{\beta_0} - \hat{\beta_1}\overline{x} = 0 \rightarrow \hat{\beta_0} = \overline{y} - \hat{\beta_1} \overline{x}$$ 
+
+$$\hat{\beta_1} = \frac{\sum_{i=1}^{n}x_i (y_i - \overline{y})}{\sum_{i=1}^{n}x_i (x_i - \overline{x})}$$
+
+$$\text{A formula for computing the slope estimate using the data in a sample} \\
+\hat{\beta_1} = \frac{\sum_{i=1}^{n} (x_i-\overline{x}) (y_i - \overline{y})}{\sum_{i=1}^{n} (x_i - \overline{x})^2 }  = \frac{\text{Sample Covariance} (x_i,y_i)}{\text{Sample Variance} (x_i)}$$
+
+# Lecture 4
+
+## Subheading
+
+The unbiased estimator of $\sigma^2$ is $\sigma^2 = \frac{1}{n-2}\sum_{i=1}^{n}\hat{u_i}^2=\frac{SSR}{n-2}=s^2$
+where $E(\hat{\sigma}^2)=\sigma^2$ and $SSR$ is the sum of squared residuals.
+
+What we really need to calculate $sd(\hat{\beta_1})=\frac{\sigma}{\sqrt{\text{Sample Var(x)}}}$
+is $\sigma$ not $\sigma^2,$ so we use $\hat{\sigma} = \sqrt{\hat{\sigma}^2},$
+which is also called the standard error of the regression (SER) or root mean squared error (RMSE).
+
+We can calculate the standard error of $\hat{\beta_1},$ i.e., the accuracy of our estimate: $se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt{\frac{1}{n-2}\sum_{i=1}^{n}\hat{u}_i^2}}{\left(\sum_{i=1}^{n}(x_i)\right)^{\frac{1}{2}}}$ We call this the standard error (rather than standard deviation) because we had to use an estimate of $\sigma.$
+
+$\underline{\text{Homoscedasticity}}:$ Variance of the error term does not depend on the value of $x,$ i.e., $Var(u|x)=\sigma^2 > 0$
+
+$\underline{\text{Heteroskedasticity:}}$ Variance of the error term does depend on the value of $x,$ i.e., $Var(u|x)=f(x) > 0$
+
+Homoscedasticity/Heteroskedasticity has $\underline{\text{NOTHING}}$ to do with whether or not OLS estimator is unbiased.
+
+### Sampling Variance of OLS (Summary)
+
+Under assumptions #1-#4 AND #5 (homoscedasticity), formula for variance of $\hat{\beta_1}$ is $Var(\hat{\beta_1}) = Var(\hat{\beta_1})=\frac{\sigma^2}{\sum_{i=1}^{n}(x_i - \overline{x})^2} = \frac{\sigma^2}{\text{Sample Var(x)}}$
+
+$Var(\hat{\beta_1})$ is smaller when 
+
+* As the error variance $(\sigma^2)$ goes down}
+
+* As the sample variance of $x$ goes up
+
+* The bigger the sample size
+
+### Estimating the error variance (Summary)
+
+$$se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt{\frac{1}{n-2}\sum_{i=1}^{n}\hat{u}_i^2}}{\left(\sum_{i=1}^{n}(x_i)\right)^{\frac{1}{2}}}$$
+
+We report our estimate of $se(\hat{\beta_1})$ below our estimate of $\hat{\beta_1}$ so we can test hypotheses about $\beta_1.$
+
+$$\text{Lecture 4} \\
+\text{Todays 3 topics are:} \\
+1. \text{ Statistical properties of OLS estimators} \\
+2. \text{ Unbiasedness} \\
+3. \text{ Variance of the OLS estimators} \\
+\text{REMEMBER THAT }x \text{ and } u \text{ ARE RANDOM VARIABLES.}\\
+\text{THE STATISTICAL PROPERTIES OF THE OLS ESTIMATORS ARE}\\
+\text{DERIVED CONDITIONAL ON THE VALUES OF THE COVARIATES IN OUR SAMPLE.} \\
+\text{THIS IS IMPORTANT IN PROOFS.} \\
+\text{UNBIASEDNESS says that over infinite samples if we averaged the estimates we'd get the true value.} \\
+(E(\hat{\beta})=\beta) \\
+E(\hat{\beta_1} | x)=\beta_1 \\
+E(\hat{\beta_0} | x)=\beta_0 \\
+\text{Assumptions for unbiasedness: } \\
+\text{1. Linear in parameters} \\
+\text{2. Random sampling} \\
+\text{3. Sample variation in the explanatory variable7} \\
+\text{4. Zero condtional mean} \\ 
+\text{Linear parameters means each variable (whatever it is) is simple scaled by parameter} \\
+\text{Random sampling means that we are picking random observations: NOT BASED UPON } y_i,~x_i,\text{ or } u_i. \\
+\text{We need some variation in the things we are interested in studying} \\
+\text{Zero conditional mean  means that in the population, } x \text{ does not give us any information about the value of } u. \\
+E(u|x)=E(u)=0 \text{ THIS IS CRITICAL ASSUMPTION}$$
+
+$$\text{er Assumptions #1-#4,} \\
+E(\hat{\beta_1} | x) = \beta_1 ~\&~ E(\hat{\beta_0} | x) = \beta_0 \\
+\text{If } x ~\&~ \text{are correlated our OLS estimators are likely to be biased.}\\
+\text{The expected values are condtional on the sample values of the covariate.} \\
+\text{Homoskedasticity, Heteroskedasticity, Estimating error variance} \\
+\text{Besides unbiasedness, we are also interested in how we can expect our estimates to be scattered around the true valu
+e.} \\
+\text{When picking an estimator we care about unbiasedness AND precision (small variance).} \\
+\text{Assumption 5: Homoskedasticity} \\
+\text{Homoskedasticity: The error has the same variance given any value of the explanatory variable, x:} \\
+Var(u|x)=\sigma^2 > 0 \\
+\text{where } \sigma^2 \text{ is an (usually) unknown constant.} \\
+\text{The variance of } u \text{ is constant w.r.t. } x \text{, i.e., the variance of } u \text{ is unrelated to } x. \\
+\text{Assumption 5 does not affect unbiasedness.} \\
+\text{Together assumptions 4 adn 5 give condition mean and variance of y} \\
+E(y|X) = E((\beta_0+\beta_1x+u)|x)=\beta_0 + \beta_1 x \\
+Var(y|x) = \sigma^2 \\
+\text{Assumption 5 means the variance of } y \text{ does not depend on } x.$$
+
+$$\text{Heteroskedasticity is if assumption #5 is not satisified.} \\
+\text{i.e., The variance of the error term } u \text{(and hance the variance of } y \text{) does depennd on the value of } x. \\
+\text{SPECIFIC CONTEXT tells us whether homoskedasticity is satisified and whether if zero conditional mean is satisified.}$$
+
+$$\text{Under Assumptions #1-#5 (all of them),} \\
+Var(\hat{\beta_1})=\frac{\sigma^2}{\sum_{i=1}^{n}(x_i - \overline{x})^2} = \frac{\sigma^2}{\text{Sample Var(x)}} \\
+Var(\hat{\beta_0}) = \frac{\sigma^2\left( \frac{1}{n}\sum_{i=1}^{n}x_i^2\right)}{\sum_{i=1}^{n}(x_i - \overline{x})^2} \\
+\text{As the error variance } (\sigma^2) \text{ goes up, so does the variance of } \hat{\beta_1}. \\
+\text{Sample variance of } x \text{ decreases variance of } \hat{\beta_1}. \\
+\text{The bigger the sample size, the smaller variance of } \hat{\beta_1}. \\
+sd(\hat{beta_1})=\frac{\sigma}{\sqrt{\text{Sample Var(x)}}} \\
+\text{Remember that } \sigma^2 = Var(u) = E(u^2) \\
+\text{Unbiased estimator of } \sigma^2 \text{ is}\\
+\frac{1}{n}\sum_{i=1}^{n}u_i^2 \\
+\text{where } u_i = y_i - \beta_0 - \beta_1x_i \\
+\hat{u_i} = y_i - \hat{\beta_0} - \hat{\beta_1}x_i\\
+\hat{u_i}\ne u_i$$
+
+# Lecture 5
+
+## Subheading
+
+### Lecture 5 Slide 13: Interpretaion of Quadratic simultenously as Linear term.
+
+The unbiased estimator of $\sigma^2$ is $\sigma^2 = \frac{1}{n-2}\sum_{i=1}^{n}\hat{u_i}^2=\frac{SSR}{n-2}=s^2$
+where $E(\hat{\sigma}^2)=\sigma^2$ and $SSR$ is the sum of squared residuals.
+
+What we really need to calculate $sd(\hat{\beta_1})=\frac{\sigma}{\sqrt{\text{Sample Var(x)}}}$
+is $\sigma$ not $\sigma^2,$ so we use $\hat{\sigma} = \sqrt{\hat{\sigma}^2},$
+which is also called the standard error of the regression (SER) or root mean squared error (RMSE).
+
+We can calculate the standard error of $\hat{\beta_1},$ i.e., the accuracy of our estimate: $se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt{\frac{1}{n-2}\sum_{i=1}^{n}\hat{u}_i^2}}{\left(\sum_{i=1}^{n}(x_i)\right)^{\frac{1}{2}}}$ We call this the standard error (rather than standard deviation) because we had to use an estimate of $\sigma.$
+
+$\underline{\text{Homoscedasticity}}:$ Variance of the error term does not depend on the value of $x,$ i.e., $Var(u|x)=\sigma^2 > 0$
+
+$\underline{\text{Heteroskedasticity:}}$ Variance of the error term does depend on the value of $x,$ i.e., $Var(u|x)=f(x) > 0$
+
+Homoscedasticity/Heteroskedasticity has $\underline{\text{NOTHING}}$ to do with whether or not OLS estimator is unbiased.
+
+### Sampling Variance of OLS (Summary)
+
+Under assumptions #1-#4 AND #5 (homoscedasticity), formula for variance of $\hat{\beta_1}$ is $Var(\hat{\beta_1}) = Var(\hat{\beta_1})=\frac{\sigma^2}{\sum_{i=1}^{n}(x_i - \overline{x})^2} = \frac{\sigma^2}{\text{Sample Var(x)}}$
+
+$Var(\hat{\beta_1})$ is smaller
+
+* as the error variance $(\sigma^2)$ goes down and
+
+* as the sample variance of $x$ goes up and
+
+* with larger sample size
+
+### Estimating the error variance (Summary)
+
+$$se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt{\frac{1}{n-2}\sum_{i=1}^{n}\hat{u}_i^2}}{\left(\sum_{i=1}^{n}(x_i)\right)^{\frac{1}{2}}}$$
+
+We report our estimate of $se(\hat{\beta_1})$ below our estimate of $\hat{\beta_1}$ so we can test hypotheses about $\beta_1.$
+
+Lecture 5 Slide 12 shows graphical understanding of quadratic term. 
+
+$$y = \beta_0 + \beta_1 x + \beta_2 x^2 + u\\
+\underline{\text{Interpretation of Quadratic Term}}\\
+\beta_1 > 0 ~\&~ \beta_2 < 0, \text{ postitive but diminishing returns to } x\\
+\beta_1 > 0 ~\&~ \beta_2 < 0, \text{ postitive and increasing returns to } x\\
+\beta_1 > 0 ~\&~ \beta_2 = 0, \text{ constant returns to } x$$
+
+Note that this model is still *linear in parameters* (an OLS assumption).
+
+## Estimating Estimator Variance (Standard Error)
+
+$$\text{Now we can calculate the sandard error of } \hat{\beta_1}, \text{ i.e., the accuracy of our estimate:} \\
+se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt{\frac{1}{n-2}\sum_{i=1}^{n}\hat{u}_i^2}}{\left(\sum_{i=1}^{n}(x_i)\right)^{\frac{1}{2}}} \\
+\text{We call this the standard error (rahter than standard deviation) because we had to use an estimate of } \sigma.\\
+\text{Usually, we report our estimate of } se(\hat{\beta_1}) \text{ below our estimate of } \hat{\beta_1} \text{ so we can test hypotheses about } \beta_1.$$
+
+
+## Weighted Least Squares (WLS), Generalized Least Squares (GLS), Feisible Generalized Least Square (FGLS)
+
+Divide regression by $h(x)$ i.e., $*\frac{1}{h_{(x)}}$
+
+$y^* = X^* \beta + U$
+
+Each square residual is weighted by $\frac{1}{h_i}$.
+
+# End of Study Sheet -----------------------------------------------
+
+# Some Review:
+
+## Fundamentals (six subheadings)
+
+### 1. Summation Operation
+
+### 2. Proportion and Percentages
+
+### 3. Random Variables
+
+### 4. Expectations
+
+$\underline{\text{Expected Value}}$ measures central tendency of probability distribution.
+
+--> For random variable $X$ the expected value is $E[X]$ i.e., population mean of X.
+
+Expected Value (Mean) is $E[X]=\int xf(x)$ i.e., expected value is each value scaled by that value's corresponding likelihood all added up.
+
+### 5. Variances and Covariances
+
+### 6. Condtitional Expectations
+
+# ----------------------------------------------- UNORGANIZED BELOW THIS LINE -----------------------------------------------
+
+### Consider Reichenbach's Principle
+
+(Correlation $\ne$ Causation but a question is begged: why is there correlation?)
+
+[Minutephysics fast and simple video about combing knowledge of causal relationships and observational knowledge of correlations to infer about additional causal relationships.](https://youtu.be/HUti6vGctQM)
+Minutephysics's key takeaway is that correlation can imply causation if you analyze causal models.
+
+Of course with experimental data, in which the variables are controlled and experimental units are randomly assigned and independent, correlation would imply causation.
+
+#### Binary Variable and Binary Variable Interpretation
+
+Binary variable (dummy variable / indicator variable) has two categories,
+
+$$X = \begin{cases} 1, & \mbox{if effect present} \\
+2, & \mbox{if effect absent} \end{cases}$$
+
+Interpretation of coefficient on dummy variable,
+
+$$\beta = \frac{\partial E[y | X]}{\partial X}$$
+
+-----------------------------------------------------------------------
+# ASSUMPTIONS, (???Which are G-M, Which are CLM???)
+
+#### 1. Linear in Parameters
+
+#### 2. Random Sampling
+
+#### 3. Sample variation in the explanatory variable (or No Collinearity?)
+
+#### 4. Zero conditional mean
+
+$E(u|x) = E(u) = 0$ The expected value of $u$ is unrelated to $x$ (and also the expected value of $u$ is zero).
+
+Our critical assumption $E(u|x) = E(u)$ is often referred to as **mean independence.**
+
+Note that $E(u|x) = E(u) = 0 \implies Cov(u,x)=0$
+
+If $Cov(u,x) \ne 0 $ then critical assumption fails, but if $Cov(u,x) = 0$ then $u,x$ may still not be mean independent (since corr only measures *linear* relation).
+
+#### 5. Homoskedasticity
+
+The error has the same variance given any value of covariate, $x$: $Var(u|x) = \sigma^2 > 0$ where $\sigma^2$ is an (usually) unknown $\underline{\text{constant}}$.
+
+Assumption #5 does not affect unbiasedness.
+
+Together, assumptions #4 and #5 give us the conditional mean and variance of $y$, $E(y|x) = \beta_0 + \beta_1 x$ and $Var(y|x) = \sigma^2$. This means that the expected (average) value of $y$ does depend on $x$. However, (under assumption #5) the variance of $y$ does not depend on $x$.
+
+#### 6. Normality
+
+$\underline{\text{Heteroskedasticity: Failure of assumption #5, variance of the error term } u \text{ (and hence the variance of } y\text{) does depend on the value of } x.}$
