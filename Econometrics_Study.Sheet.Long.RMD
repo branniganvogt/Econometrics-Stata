@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 $$\text{EC 570} \\
 \text{Fall 2021} \\
 \text{Term Study Sheet—Long} \\
-\text{Drafted: November 28 2021}$$
+\text{Drafted: November 29 2021}$$
 
 # Lecture 1
 
@@ -18,13 +18,13 @@ This graduate level econometrics course is designed to teach students with basic
 
 ### Recommended Textbooks
 
-• J. M. Wooldridge, Econometric Analysis of Cross Section and Panel Data, 2nd ed., The MIP Press, 2010. 
+• J. M. Wooldridge, Econometric Analysis of Cross Section and Panel Data, 2nd ed., The MIT Press, 2010. 
 
 • W. H. Greene, Econometric Analysis, 7th ed., Pearson Education, 2012 
-
+u
 • A. Colin Cameron and Pravin K. Trivedi, Microeconometrics: Methods and Applications. Cambridge University Press, 2005. 
 
-• J. M. Wooldridge: Introductory Econometrics (any edition)
+• J. M. Wooldridge: Introductory Econometrics (any edition, excellent for prerequisites)
 
 ### Econometrics overview
 
@@ -344,6 +344,128 @@ se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt
 \text{We call this the standard error (rahter than standard deviation) because we had to use an estimate of } \sigma.\\
 \text{Usually, we report our estimate of } se(\hat{\beta_1}) \text{ below our estimate of } \hat{\beta_1} \text{ so we can test hypotheses about } \beta_1.$$
 
+We ended lecture 5 on Thursday of week 3.
+
+# Lecture 6
+
+## Variance of OLS in Multiple Regression, Fundamental Tradeoff of Bias & Precision, Gauss-Markov Theorem, Inference.
+
+$\underline{\text{Fundamental tradeoff between bias and variance}}$ is that if we leave out variables with high $R_j^2$ then omitted variable bias; meanwhile, if we add those in then estimation variance goes up. Dealing with the fundamental tradeoff is very case and situation specific.
+
+Sample size cannot solve omitted variable bias. But variance does depend on variance of x.
+
+Omitted variables are likely to increase variance in $U$.
+
+## Variance of OLS Estimators (How Precise?)
+
+$\text{Homoskedasticity in Algebraic Form}$
+$$Var(u | x_1, x_2, \dots, x_k) = \sigma^2 > 0$$
+$\text{Homoskedasticity in Matrix Form}$
+$$Var(U|X) = \sigma^2 I_n = \sigma^2 \begin{bmatrix}
+1 & 0 & 0 & \dots & 0 \\
+0 & 1 & 0 & \dots & 0 \\
+0 & 0 & 1 & \dots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & 0 & 1
+\end{bmatrix}$$
+
+The homoskedasticity assumption (#5) 
+
+
+The SIXTH ASSUMPTION IS NORMALITY.
+
+$$u|x \sim N(0,\sigma^2) \\
+U|X \sim N(\vec{0},\sigma^2 I_n)$$
+
+Assumptions #1-#6 are often called Classical Linear Model (CLM) Assumptions.
+
+Under the 6 assumptions, $y|x \sim N(\beta_0 + \beta_1x_1+\dots+\beta_kx_k, \sigma^2)$
+
+$$\widehat{\beta}|X \sim N(\beta,\sigma^2 (X^T X)^{-1})\\
+\widehat{\beta_j}|X \sim N(\beta_j,Var(\beta_j)) \text{ where}\\
+Var(\beta_j)=\frac{\sigma^2}{SST_j(1-R_j^2)} = \sigma^2 (X^TX)_{jj}^{-1}$$
+
+Remember standard normal distribution is $\sim N(0,1)$
+
+$$\frac{\widehat{\beta_j}-{\beta_j}}{sd(\widehat{\beta_j})} \sim N(0,1)$$
+
+# Lecture 7
+
+If we test a **joint hypothesis** e.g., $H_0: \beta_1 = 0 \text{ AND } \beta_2 =0$ $H_1: \beta_1 \ne 0 \text{ OR } \beta_2 \ne 0 \text{ OR } \beta_1 \ne 0 \text{ and simultaneously }\beta_2 \ne 0$
+
+We basically just force all null hypothesis to be true and call this our restricted regression. Then we also just do regular unrestricted regression. We compare the two (often with adjusted $R^2$) to see if freeing the model from the null hypothesis allows it to be statistically better.
+
+### Asymptotic or Large Sample Properties: Consistency and Asymptotic Normality
+
+Asymptotic Analysis is $n \rightarrow \infty$.
+
+LLN says as $n \rightarrow \infty$ our sample mean approaches population mean.
+
+Consistent means estimator gets better as $n \rightarrow \infty$. Really, it means that the probability that estimated is much different than true value approaches zero as sample grows i.e., Consistency says as $n \rightarrow \infty$ $Pr(|\hat{\beta_j} - \beta_j| > \epsilon) \rightarrow 0$
+
+Assumption #6 (Normality), combined with #1-5, allows for inference.
+
+CLT says mean is normally distributed. CLT says $\sqrt{n}(\overline{y_n} - \mu) \sim N(0,Var(y_i))$
+
+# Lecture 8: Dummy Variables, Standardization and Beta Coefficients, Confidence Intervals, Redisual Analysis
+
+Qualitative (categorical) information may be included in regression models by using a 'dummy variable'. These binary variables take only one of two values, $0$ or $1$. The $0$ indicates reference (or base) group and the $1$ indicates comparison group. For example, if $male$ is dummy variable then $male=1$ when observational unit is male and $male=0$ when observational unit is not male. So reference group is not-male. In this example, coefficient on $male$ would be the difference in outcome variable for males compared to not-males. If coefficient on $male$ is zero then uno difference *on average* in outcome variable between male and not-male groups. The coefficient on male shows how the intercept shifts depending on group. For the slope to change due to dummies, we'll need to incorporate them as interaction terms with continuous variables.
+
+The $\underline{\text{dummy variable trap}}$ is including all possible groups in our model, causing perfect collinearity (fail assumption #3 and software either doesn't compute or drops one group). So in the example with $male$, the dummy variable trap did not occur since we did not include $notmale$ in our regression as well.
+
+Table in Lecture 8 on Slide 10. 
+
+INTERPRATE LPM AS PERCENTAGE POINTS, $\beta_j \times 100 \text{ interpret percentage point change}$. Probability that $y=1$
+
+$\underline{\text{Chow Test}}$
+
+Standardizing Coefficients just means taking value, subtracting mean value, and dividing by sd. Doing this for all variables (outcome and covariates) means we can easily see which covariates are having more dramatic effects on outcome variable. *For everyone $1$ sd in $x_j$ we expect a $\delta_j$ sd change in $y$*
+
+# Lecture 9
+
+## Consequences of Heteroskedasticity, Correcting Standard Errors for Heteroskedasticity, Testing for Heteroskedasticity
+
+Remember that under OLS assumptions #1-5 we know OLS estimators are $\underline{\text{BLUE.}}$ Meanwhile, failure of #5 (a.k.a. presence of heteroskedasticity) means OLS is no longer *best* (no longer most efficient, no longer most precise, no longer smallest variance estimator). Though also always remember that heteroskedasticity has NOTHING to do with unbiasedness -- heteroskedasticity alone is not sufficient for bias. 
+
+Other estimators may be more precise under heteroskedasticity, estimators such as WLS and FGLS.
+
+**Most important consequence of heteroskedasticity is that OUR FORMULA FOR ESTIMATING STANDARD ERROR OF OLS ESTIMATORS IS WRONG.** If those are wrong, so are all of our tests! So **heteroskedasticity causes problems with inference**. This leads into robust standard errors.
+
+Important to note that heteroskedasticity does not effect $R^2$ because $R^2$ is only concerned with unconditional variances, not conditional variances.
+
+## Heteroskedasticity-robust standard errors (L.9 S.14)
+
+$\text{This estimator is valid for BOTH homoskedasticity AND heteroskedasticity.}$
+
+$$\text{Simple regression,}\\
+Var(\widehat{\beta}) = \frac{\sum_{i=1}^{n}(x_i - \overline{x})^2\widehat{u_i}^2}{SST_x^2} \\
+\text{where } \widehat{u_i} \text{ is the OLS residual of the regression of } y \text{ on } x.$$
+
+$$\text{Multiple regression,}\\
+Var(\widehat{\beta}) = \frac{\sum_{i=1}^{n}\widehat{r_{ij}}^2\widehat{u_i}^2}{SST_x^2} \\
+\text{where } \widehat{r_{ij}} \text{ is the } i \text{th OLS residual of the regression of } x_j \text{ on all other covariates} \\
+\text{and } SSR_j^2 \text{ is the sum of squared residuals from that regression}.$$
+
+Compute robust standard errors in Stata with `, robust` at end of regression command. The computed standard errors will be valid in the presence of heteroskedasticity of 
+**any** unknown form.
+
+Usually (though not always) heteroskedasticity-robust standard errors are larger than usual standard errors.
+
+A PROBLEM OF ROBUST STANDARD ERRORS IS BIAS IN SMALL SAMPLES (L.10 S.20). Heteroskedasticity-robust standard errors are only good for large samples. This is because the robust standard errors are consistent but not unbiased (i.e. we need $n \rightarrow \infty$ for the CLT and LLN to kick in). In small samples, they can be even more biased than the usual standard errors. In practice, it’s best to report **and use** (for testing) robust standard errors if the sample size is “large enough".
+
+Remember that in Stata when running commands, they often reference the most recent regression ran. Therefore, simply run `reg` with robust SEs and then run your `test`s.
+
+Remember that LPM always has heteroskedasticity; therefore, whenever we use a LPM, we should always report heteroskedasticity-robust standard errors.
+
+## Testing for Heteroskedasticity
+
+In Stata, run a `reg` on $\hat{u}^2$ by $x_1,\dots,x_k$ i.e., explain residual squared by all covariates.
+
+$\underline{\text{The Breusch-Pagan test}}$ has null hypothesis of homoskedasticity against alternative hypothesis of heteroskedasticity (L.10 S.37).
+
+$\underline{\text{White Test Version 1}}$
+
+$\underline{\text{White Test Version 2}}$
 
 ## Weighted Least Squares (WLS), Generalized Least Squares (GLS), Feisible Generalized Least Square (FGLS)
 
@@ -353,11 +475,35 @@ $y^* = X^* \beta + U$
 
 Each square residual is weighted by $\frac{1}{h_i}$.
 
+# Lecture 10: Measurement Error, Specifications, Proxy Variable, Missing Data, Outliers.
+
+$\underline{\text{Measurement Error}:}$ True level vs Reported level.
+
+$\underline{\text{Measurement Error (Outcome Variable)}:} ~ y^*$ is true, $y$ is observed.
+
+$\underline{\text{Measurement Error (Covariate)}:} ~ x_1 = x_1^*+e_1$ -> underestimate when $e_1>0$.
+
+If $Corr(x_1^*,e_1) = 0$ then no systemic measure error.
+
+### L.10 Slide 19
+
+If $Corr(x_j^*,e_1) = 0$ then no bias for $\hat{\beta_j}$
+
+If $Corr(x_j^*,e_1) > 0$ and $\hat{\beta_j}>0$ then $\hat{\beta_j}$ overestimate.
+
+If $Corr(x_j^*,e_1) > 0$ and $\hat{\beta_j}<0$ then $\hat{\beta_j}$ underestimate.
+
+If $Corr(x_j^*,e_1) < 0$ and $\hat{\beta_j}>0$ then $\hat{\beta_j}$ underestimate.
+
+If $Corr(x_j^*,e_1) < 0$  and $\hat{\beta_j}<0$ then $\hat{\beta_j}$ overestimate.
+
+### L.10 Slide 20
+
 # End of Study Sheet -----------------------------------------------
 
 # Some Review:
 
-## Fundamentals (six subheadings)
+## Summation and Statistical Fundamentals (six subheadings)
 
 ### 1. Summation Operation
 
@@ -388,6 +534,13 @@ Minutephysics's key takeaway is that correlation can imply causation if you anal
 
 Of course with experimental data, in which the variables are controlled and experimental units are randomly assigned and independent, correlation would imply causation.
 
+#### Subheading
+
+$$Residual = Actual - Predicted\\
+Population: Error ~~~~y-y_i \\
+VS\\
+Sample: Residual ~~~~~y_i - \hat{y}$$
+
 #### Binary Variable and Binary Variable Interpretation
 
 Binary variable (dummy variable / indicator variable) has two categories,
@@ -400,7 +553,7 @@ Interpretation of coefficient on dummy variable,
 $$\beta = \frac{\partial E[y | X]}{\partial X}$$
 
 -----------------------------------------------------------------------
-# ASSUMPTIONS, (???Which are G-M, Which are CLM???)
+# ASSUMPTIONS, (1-5 are G-M Assumptions, 1-6 are CLM Asssumptions)
 
 #### 1. Linear in Parameters
 

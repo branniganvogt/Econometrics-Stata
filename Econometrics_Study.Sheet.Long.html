@@ -170,16 +170,15 @@ pre code {
 <p><span class="math display">\[\text{EC 570} \\
 \text{Fall 2021} \\
 \text{Term Study Sheet—Long} \\
-\text{Drafted: November 28 2021}\]</span></p>
+\text{Drafted: November 29 2021}\]</span></p>
 <div id="lecture-1" class="section level1">
 <h1>Lecture 1</h1>
 <p>This graduate level econometrics course is designed to teach students with basic quantitative and computer skills for econometric modeling with multivariate data with emphasis on economic policy evaluation. The specific topics of the course include detailed analysis and interpretation of univariate and multivariate regression, dummy variables, measurement issues and missing data issues.</p>
 <div id="recommended-textbooks" class="section level3">
 <h3>Recommended Textbooks</h3>
-<p>• J. M. Wooldridge, Econometric Analysis of Cross Section and Panel Data, 2nd ed., The MIP Press, 2010.</p>
-<p>• W. H. Greene, Econometric Analysis, 7th ed., Pearson Education, 2012</p>
-<p>• A. Colin Cameron and Pravin K. Trivedi, Microeconometrics: Methods and Applications. Cambridge University Press, 2005.</p>
-<p>• J. M. Wooldridge: Introductory Econometrics (any edition)</p>
+<p>• J. M. Wooldridge, Econometric Analysis of Cross Section and Panel Data, 2nd ed., The MIT Press, 2010.</p>
+<p>• W. H. Greene, Econometric Analysis, 7th ed., Pearson Education, 2012 u • A. Colin Cameron and Pravin K. Trivedi, Microeconometrics: Methods and Applications. Cambridge University Press, 2005.</p>
+<p>• J. M. Wooldridge: Introductory Econometrics (any edition, excellent for prerequisites)</p>
 </div>
 <div id="econometrics-overview" class="section level3">
 <h3>Econometrics overview</h3>
@@ -452,6 +451,92 @@ sd(\hat{beta_1})=\frac{\sigma}{\sqrt{\text{Sample Var(x)}}} \\
 se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt{\frac{1}{n-2}\sum_{i=1}^{n}\hat{u}_i^2}}{\left(\sum_{i=1}^{n}(x_i)\right)^{\frac{1}{2}}} \\
 \text{We call this the standard error (rahter than standard deviation) because we had to use an estimate of } \sigma.\\
 \text{Usually, we report our estimate of } se(\hat{\beta_1}) \text{ below our estimate of } \hat{\beta_1} \text{ so we can test hypotheses about } \beta_1.\]</span></p>
+<p>We ended lecture 5 on Thursday of week 3.</p>
+</div>
+</div>
+<div id="lecture-6" class="section level1">
+<h1>Lecture 6</h1>
+<div id="variance-of-ols-in-multiple-regression-fundamental-tradeoff-of-bias-precision-gauss-markov-theorem-inference." class="section level2">
+<h2>Variance of OLS in Multiple Regression, Fundamental Tradeoff of Bias &amp; Precision, Gauss-Markov Theorem, Inference.</h2>
+<p><span class="math inline">\(\underline{\text{Fundamental tradeoff between bias and variance}}\)</span> is that if we leave out variables with high <span class="math inline">\(R_j^2\)</span> then omitted variable bias; meanwhile, if we add those in then estimation variance goes up. Dealing with the fundamental tradeoff is very case and situation specific.</p>
+<p>Sample size cannot solve omitted variable bias. But variance does depend on variance of x.</p>
+<p>Omitted variables are likely to increase variance in <span class="math inline">\(U\)</span>.</p>
+</div>
+<div id="variance-of-ols-estimators-how-precise" class="section level2">
+<h2>Variance of OLS Estimators (How Precise?)</h2>
+<p><span class="math inline">\(\text{Homoskedasticity in Algebraic Form}\)</span> <span class="math display">\[Var(u | x_1, x_2, \dots, x_k) = \sigma^2 &gt; 0\]</span> <span class="math inline">\(\text{Homoskedasticity in Matrix Form}\)</span> <span class="math display">\[Var(U|X) = \sigma^2 I_n = \sigma^2 \begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; \dots &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; \dots &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; \dots &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}\]</span></p>
+<p>The homoskedasticity assumption (#5)</p>
+<p>The SIXTH ASSUMPTION IS NORMALITY.</p>
+<p><span class="math display">\[u|x \sim N(0,\sigma^2) \\
+U|X \sim N(\vec{0},\sigma^2 I_n)\]</span></p>
+<p>Assumptions #1-#6 are often called Classical Linear Model (CLM) Assumptions.</p>
+<p>Under the 6 assumptions, <span class="math inline">\(y|x \sim N(\beta_0 + \beta_1x_1+\dots+\beta_kx_k, \sigma^2)\)</span></p>
+<p><span class="math display">\[\widehat{\beta}|X \sim N(\beta,\sigma^2 (X^T X)^{-1})\\
+\widehat{\beta_j}|X \sim N(\beta_j,Var(\beta_j)) \text{ where}\\
+Var(\beta_j)=\frac{\sigma^2}{SST_j(1-R_j^2)} = \sigma^2 (X^TX)_{jj}^{-1}\]</span></p>
+<p>Remember standard normal distribution is <span class="math inline">\(\sim N(0,1)\)</span></p>
+<p><span class="math display">\[\frac{\widehat{\beta_j}-{\beta_j}}{sd(\widehat{\beta_j})} \sim N(0,1)\]</span></p>
+</div>
+</div>
+<div id="lecture-7" class="section level1">
+<h1>Lecture 7</h1>
+<p>If we test a <strong>joint hypothesis</strong> e.g., <span class="math inline">\(H_0: \beta_1 = 0 \text{ AND } \beta_2 =0\)</span> <span class="math inline">\(H_1: \beta_1 \ne 0 \text{ OR } \beta_2 \ne 0 \text{ OR } \beta_1 \ne 0 \text{ and simultaneously }\beta_2 \ne 0\)</span></p>
+<p>We basically just force all null hypothesis to be true and call this our restricted regression. Then we also just do regular unrestricted regression. We compare the two (often with adjusted <span class="math inline">\(R^2\)</span>) to see if freeing the model from the null hypothesis allows it to be statistically better.</p>
+<div id="asymptotic-or-large-sample-properties-consistency-and-asymptotic-normality" class="section level3">
+<h3>Asymptotic or Large Sample Properties: Consistency and Asymptotic Normality</h3>
+<p>Asymptotic Analysis is <span class="math inline">\(n \rightarrow \infty\)</span>.</p>
+<p>LLN says as <span class="math inline">\(n \rightarrow \infty\)</span> our sample mean approaches population mean.</p>
+<p>Consistent means estimator gets better as <span class="math inline">\(n \rightarrow \infty\)</span>. Really, it means that the probability that estimated is much different than true value approaches zero as sample grows i.e., Consistency says as <span class="math inline">\(n \rightarrow \infty\)</span> <span class="math inline">\(Pr(|\hat{\beta_j} - \beta_j| &gt; \epsilon) \rightarrow 0\)</span></p>
+<p>Assumption #6 (Normality), combined with #1-5, allows for inference.</p>
+<p>CLT says mean is normally distributed. CLT says <span class="math inline">\(\sqrt{n}(\overline{y_n} - \mu) \sim N(0,Var(y_i))\)</span></p>
+</div>
+</div>
+<div id="lecture-8-dummy-variables-standardization-and-beta-coefficients-confidence-intervals-redisual-analysis" class="section level1">
+<h1>Lecture 8: Dummy Variables, Standardization and Beta Coefficients, Confidence Intervals, Redisual Analysis</h1>
+<p>Qualitative (categorical) information may be included in regression models by using a ‘dummy variable’. These binary variables take only one of two values, <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>. The <span class="math inline">\(0\)</span> indicates reference (or base) group and the <span class="math inline">\(1\)</span> indicates comparison group. For example, if <span class="math inline">\(male\)</span> is dummy variable then <span class="math inline">\(male=1\)</span> when observational unit is male and <span class="math inline">\(male=0\)</span> when observational unit is not male. So reference group is not-male. In this example, coefficient on <span class="math inline">\(male\)</span> would be the difference in outcome variable for males compared to not-males. If coefficient on <span class="math inline">\(male\)</span> is zero then uno difference <em>on average</em> in outcome variable between male and not-male groups. The coefficient on male shows how the intercept shifts depending on group. For the slope to change due to dummies, we’ll need to incorporate them as interaction terms with continuous variables.</p>
+<p>The <span class="math inline">\(\underline{\text{dummy variable trap}}\)</span> is including all possible groups in our model, causing perfect collinearity (fail assumption #3 and software either doesn’t compute or drops one group). So in the example with <span class="math inline">\(male\)</span>, the dummy variable trap did not occur since we did not include <span class="math inline">\(notmale\)</span> in our regression as well.</p>
+<p>Table in Lecture 8 on Slide 10.</p>
+<p>INTERPRATE LPM AS PERCENTAGE POINTS, <span class="math inline">\(\beta_j \times 100 \text{ interpret percentage point change}\)</span>. Probability that <span class="math inline">\(y=1\)</span></p>
+<p><span class="math inline">\(\underline{\text{Chow Test}}\)</span></p>
+<p>Standardizing Coefficients just means taking value, subtracting mean value, and dividing by sd. Doing this for all variables (outcome and covariates) means we can easily see which covariates are having more dramatic effects on outcome variable. <em>For everyone <span class="math inline">\(1\)</span> sd in <span class="math inline">\(x_j\)</span> we expect a <span class="math inline">\(\delta_j\)</span> sd change in <span class="math inline">\(y\)</span></em></p>
+</div>
+<div id="lecture-9" class="section level1">
+<h1>Lecture 9</h1>
+<div id="consequences-of-heteroskedasticity-correcting-standard-errors-for-heteroskedasticity-testing-for-heteroskedasticity" class="section level2">
+<h2>Consequences of Heteroskedasticity, Correcting Standard Errors for Heteroskedasticity, Testing for Heteroskedasticity</h2>
+<p>Remember that under OLS assumptions #1-5 we know OLS estimators are <span class="math inline">\(\underline{\text{BLUE.}}\)</span> Meanwhile, failure of #5 (a.k.a. presence of heteroskedasticity) means OLS is no longer <em>best</em> (no longer most efficient, no longer most precise, no longer smallest variance estimator). Though also always remember that heteroskedasticity has NOTHING to do with unbiasedness – heteroskedasticity alone is not sufficient for bias.</p>
+<p>Other estimators may be more precise under heteroskedasticity, estimators such as WLS and FGLS.</p>
+<p><strong>Most important consequence of heteroskedasticity is that OUR FORMULA FOR ESTIMATING STANDARD ERROR OF OLS ESTIMATORS IS WRONG.</strong> If those are wrong, so are all of our tests! So <strong>heteroskedasticity causes problems with inference</strong>. This leads into robust standard errors.</p>
+<p>Important to note that heteroskedasticity does not effect <span class="math inline">\(R^2\)</span> because <span class="math inline">\(R^2\)</span> is only concerned with unconditional variances, not conditional variances.</p>
+</div>
+<div id="heteroskedasticity-robust-standard-errors-l.9-s.14" class="section level2">
+<h2>Heteroskedasticity-robust standard errors (L.9 S.14)</h2>
+<p><span class="math inline">\(\text{This estimator is valid for BOTH homoskedasticity AND heteroskedasticity.}\)</span></p>
+<p><span class="math display">\[\text{Simple regression,}\\
+Var(\widehat{\beta}) = \frac{\sum_{i=1}^{n}(x_i - \overline{x})^2\widehat{u_i}^2}{SST_x^2} \\
+\text{where } \widehat{u_i} \text{ is the OLS residual of the regression of } y \text{ on } x.\]</span></p>
+<p><span class="math display">\[\text{Multiple regression,}\\
+Var(\widehat{\beta}) = \frac{\sum_{i=1}^{n}\widehat{r_{ij}}^2\widehat{u_i}^2}{SST_x^2} \\
+\text{where } \widehat{r_{ij}} \text{ is the } i \text{th OLS residual of the regression of } x_j \text{ on all other covariates} \\
+\text{and } SSR_j^2 \text{ is the sum of squared residuals from that regression}.\]</span></p>
+<p>Compute robust standard errors in Stata with <code>, robust</code> at end of regression command. The computed standard errors will be valid in the presence of heteroskedasticity of <strong>any</strong> unknown form.</p>
+<p>Usually (though not always) heteroskedasticity-robust standard errors are larger than usual standard errors.</p>
+<p>A PROBLEM OF ROBUST STANDARD ERRORS IS BIAS IN SMALL SAMPLES (L.10 S.20). Heteroskedasticity-robust standard errors are only good for large samples. This is because the robust standard errors are consistent but not unbiased (i.e. we need <span class="math inline">\(n \rightarrow \infty\)</span> for the CLT and LLN to kick in). In small samples, they can be even more biased than the usual standard errors. In practice, it’s best to report <strong>and use</strong> (for testing) robust standard errors if the sample size is “large enough”.</p>
+<p>Remember that in Stata when running commands, they often reference the most recent regression ran. Therefore, simply run <code>reg</code> with robust SEs and then run your <code>test</code>s.</p>
+<p>Remember that LPM always has heteroskedasticity; therefore, whenever we use a LPM, we should always report heteroskedasticity-robust standard errors.</p>
+</div>
+<div id="testing-for-heteroskedasticity" class="section level2">
+<h2>Testing for Heteroskedasticity</h2>
+<p>In Stata, run a <code>reg</code> on <span class="math inline">\(\hat{u}^2\)</span> by <span class="math inline">\(x_1,\dots,x_k\)</span> i.e., explain residual squared by all covariates.</p>
+<p><span class="math inline">\(\underline{\text{The Breusch-Pagan test}}\)</span> has null hypothesis of homoskedasticity against alternative hypothesis of heteroskedasticity (L.10 S.37).</p>
+<p><span class="math inline">\(\underline{\text{White Test Version 1}}\)</span></p>
+<p><span class="math inline">\(\underline{\text{White Test Version 2}}\)</span></p>
 </div>
 <div id="weighted-least-squares-wls-generalized-least-squares-gls-feisible-generalized-least-square-fgls" class="section level2">
 <h2>Weighted Least Squares (WLS), Generalized Least Squares (GLS), Feisible Generalized Least Square (FGLS)</h2>
@@ -460,13 +545,31 @@ se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt
 <p>Each square residual is weighted by <span class="math inline">\(\frac{1}{h_i}\)</span>.</p>
 </div>
 </div>
+<div id="lecture-10-measurement-error-specifications-proxy-variable-missing-data-outliers." class="section level1">
+<h1>Lecture 10: Measurement Error, Specifications, Proxy Variable, Missing Data, Outliers.</h1>
+<p><span class="math inline">\(\underline{\text{Measurement Error}:}\)</span> True level vs Reported level.</p>
+<p><span class="math inline">\(\underline{\text{Measurement Error (Outcome Variable)}:} ~ y^*\)</span> is true, <span class="math inline">\(y\)</span> is observed.</p>
+<p><span class="math inline">\(\underline{\text{Measurement Error (Covariate)}:} ~ x_1 = x_1^*+e_1\)</span> -&gt; underestimate when <span class="math inline">\(e_1&gt;0\)</span>.</p>
+<p>If <span class="math inline">\(Corr(x_1^*,e_1) = 0\)</span> then no systemic measure error.</p>
+<div id="l.10-slide-19" class="section level3">
+<h3>L.10 Slide 19</h3>
+<p>If <span class="math inline">\(Corr(x_j^*,e_1) = 0\)</span> then no bias for <span class="math inline">\(\hat{\beta_j}\)</span></p>
+<p>If <span class="math inline">\(Corr(x_j^*,e_1) &gt; 0\)</span> and <span class="math inline">\(\hat{\beta_j}&gt;0\)</span> then <span class="math inline">\(\hat{\beta_j}\)</span> overestimate.</p>
+<p>If <span class="math inline">\(Corr(x_j^*,e_1) &gt; 0\)</span> and <span class="math inline">\(\hat{\beta_j}&lt;0\)</span> then <span class="math inline">\(\hat{\beta_j}\)</span> underestimate.</p>
+<p>If <span class="math inline">\(Corr(x_j^*,e_1) &lt; 0\)</span> and <span class="math inline">\(\hat{\beta_j}&gt;0\)</span> then <span class="math inline">\(\hat{\beta_j}\)</span> underestimate.</p>
+<p>If <span class="math inline">\(Corr(x_j^*,e_1) &lt; 0\)</span> and <span class="math inline">\(\hat{\beta_j}&lt;0\)</span> then <span class="math inline">\(\hat{\beta_j}\)</span> overestimate.</p>
+</div>
+<div id="l.10-slide-20" class="section level3">
+<h3>L.10 Slide 20</h3>
+</div>
+</div>
 <div id="end-of-study-sheet" class="section level1">
 <h1>End of Study Sheet ———————————————–</h1>
 </div>
 <div id="some-review" class="section level1">
 <h1>Some Review:</h1>
-<div id="fundamentals-six-subheadings" class="section level2">
-<h2>Fundamentals (six subheadings)</h2>
+<div id="summation-and-statistical-fundamentals-six-subheadings" class="section level2">
+<h2>Summation and Statistical Fundamentals (six subheadings)</h2>
 <div id="summation-operation" class="section level3">
 <h3>1. Summation Operation</h3>
 </div>
@@ -497,6 +600,13 @@ se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt
 <p>(Correlation <span class="math inline">\(\ne\)</span> Causation but a question is begged: why is there correlation?)</p>
 <p><a href="https://youtu.be/HUti6vGctQM">Minutephysics fast and simple video about combing knowledge of causal relationships and observational knowledge of correlations to infer about additional causal relationships.</a> Minutephysics’s key takeaway is that correlation can imply causation if you analyze causal models.</p>
 <p>Of course with experimental data, in which the variables are controlled and experimental units are randomly assigned and independent, correlation would imply causation.</p>
+<div id="subheading-2" class="section level4">
+<h4>Subheading</h4>
+<p><span class="math display">\[Residual = Actual - Predicted\\
+Population: Error ~~~~y-y_i \\
+VS\\
+Sample: Residual ~~~~~y_i - \hat{y}\]</span></p>
+</div>
 <div id="binary-variable-and-binary-variable-interpretation" class="section level4">
 <h4>Binary Variable and Binary Variable Interpretation</h4>
 <p>Binary variable (dummy variable / indicator variable) has two categories,</p>
@@ -508,8 +618,8 @@ se(\hat{\beta_1})=\frac{\hat{\sigma}}{\sqrt{\text{Sample Var(x)}}} = \frac{\sqrt
 </div>
 </div>
 </div>
-<div id="assumptions-which-are-g-m-which-are-clm" class="section level1">
-<h1>ASSUMPTIONS, (???Which are G-M, Which are CLM???)</h1>
+<div id="assumptions-1-5-are-g-m-assumptions-1-6-are-clm-asssumptions" class="section level1">
+<h1>ASSUMPTIONS, (1-5 are G-M Assumptions, 1-6 are CLM Asssumptions)</h1>
 <div id="linear-in-parameters" class="section level4">
 <h4>1. Linear in Parameters</h4>
 </div>
