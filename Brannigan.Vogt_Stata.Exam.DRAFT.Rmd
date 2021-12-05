@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 $$\text{EC 570} \\
 \text{Fall 2021} \\
 \text{Stata Take Home Final Exam} \\
-\text{Due: December 7 2021 11:59 PM} \\
+\text{Due: December 10 2021 11:59 PM} \\
 \text{Total Points: 65}$$
 
 For this question, you will need to use a dataset of your own choosing.
@@ -132,8 +132,7 @@ You can refer these:
 
     summarize valueh hhincome if e(sample)==1
 
-$$\text{ANSWER 4}\\
-\text{REQUIRES outreg2 COMMAND or similar}$$
+![](question4.stataexam.PNG)
 
 \newpage
 
@@ -207,6 +206,8 @@ $$\text{ANSWER 9}$$
 
 $$\text{ANSWER 10}$$
 
+![](question10.stataexam.PNG)
+
 \newpage
 
 **11.** Write down your multiple regression equation (including your new variable).  See example below; **replace the $x$s and $y$s with your variable names. (1 point)**
@@ -234,6 +235,10 @@ $$\text{ANSWER 12}$$
 
 $$\text{ANSWER 13}$$
 
+![](question13.stataexam.PNG)
+
+![](question13.stataexam.weighted.PNG)
+
 \newpage
 
 **14.** 	Now run a new regression where you characterize $y$ in natural log form rather than levels, i.e.
@@ -244,9 +249,15 @@ $$\ln (y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + u$$
 
 ***
 
+`gen lvalueh = ln(valueh)`
+
 $$\ln (valueh) = \beta_0 + \beta_1 hhincome + \beta_2 costelec + u$$
 
-$$\text{ANSWER 14}$$
+Additional $\$100$ total household income at a constant costeleclevel will be associated with $0.0363\%$ increase in home value.
+
+Additional $\$100$ annual electricity cost at a constant hhincome level will be associated with $0.252\%$ increase in home value.
+
+![](question14.stataexam.PNG)
 
 \newpage
 
@@ -258,9 +269,18 @@ $$y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_2^2+ u$$
 
 ***
 
-$$valueh = \beta_0 + \beta_1 hhincome + \beta_2 costelec + \beta_3 hhincome^2 + u$$
+`gen hhincome2 = hhincome^2`
 
-$$\text{ANSWER 15}$$
+$$valueh = \beta_0 + \beta_1 hhincome + \beta_2 costelec + \beta_3 hhincome^2 + u\\
+\overline{hhincome} = 135176.6$$
+
+At this sample mean of hhincome, a $1$ dollar increase in hhincome would be associated with an 1.81 dollar increase in valueh. $( 1.956113 + 135176.6 * -5.57e-07 * 2)$
+
+In FW weight it is $(1.853989 + 132840.8 * -4.78e-07 *2) = 1.73$ increase in *valueh* per unit increase *hhincome* at *hhincome* mean.
+
+This association is increasing with decreasing returns.
+
+![](question15.stataexam.PNG)
 
 \newpage
 
@@ -286,7 +306,9 @@ If you want, you can also have a binary dependent variable, but this is NOT requ
 
 ***
 
-$$\text{ANSWER 17}$$
+*collegegrad* is a binary variable which we generated using *educd* which provided detailed information on educational attainment, and we set the *collegegrad* to true when bachelors or higher is achieved and to false when the observation has no bachelor, professional, or doctoral degree.
+
+![](question17.stataexam.PNG)
 
 \newpage
 
@@ -294,13 +316,15 @@ $$\text{ANSWER 17}$$
 
 ***
 
-$$\text{ANSWER 18}$$
+Collegegrad is average $.4847185$ illustrating a $48\%$ bachelors or higher attainment of the regression sample.
 
 \newpage
 
 **19.**	Create a separate histogram of your outcome variable for each value of your binary variable using Stata’s histogram command with the “by” option.  For example, your code might be: `histogram y, by (x3)` where $y$ is your dependent variable and $x3$ is your binary variable. **(2 points)**
 
 ***
+
+![](question19.stataexam.histogram.PNG)
 
 $$\text{ANSWER 19}$$
 
@@ -322,7 +346,8 @@ $$\text{ANSWER 20}$$
 
 $$valueh = \beta_0 + \beta_1 hhincome + \beta_2 costelec + \beta_3 collegegrad + u$$
 
-$$\text{ANSWER 21}$$
+*collegegrad* is unsurprisingly statistically significant as this variable is well known to positively correlate with house value.
+What the output suggests is that for some level of household income and some level of annual electricity cost, being a *collegegrad* is associated with about a $\$92,000$ increase in house value.
 
 \newpage
 
@@ -336,7 +361,9 @@ where $y$ is your dependent variable, $x1$ is your continuous variable and $x3$ 
 
 ***
 
-$$\text{ANSWER 22}$$
+`twoway (scatter valueh hhincome if collegegrad==1) (scatter valueh hhincome if collegegrad==0, ms(X)), legend(label(1 "College Graduate") label(2 "No Bachelors Degree"))`
+
+![](question22.stataexam.scatter.PNG)
 
 \newpage
 
@@ -348,7 +375,10 @@ Based on your plot, does it look like the relationship between your dependent va
 
 ***
 
-$$\text{ANSWER 23}$$
+`twoway (lfit valueh hhincome if collegegrad==1) (lfit valueh hhincome if collegegrad==0, lp(-)), legend(label(1 "Bachelor Degree") label(2 "No Bachelor Degree"))`
+
+
+Based on the plot, the relationship differs as the slope for a degree holder is steeper than the slope for people without a bachelor or higher degree. At some household income level, if the observation has a degree then they will on average have a higher home value than an observation at the same household income level but no bachelors degree.
 
 \newpage
 
@@ -356,7 +386,10 @@ $$\text{ANSWER 23}$$
 
 ***
 
-$$\text{ANSWER 24}$$
+`reg valueh hhincome hhincomeXcollegegrad [fw = perwt]`
+
+
+This new regression allows the effect of *hhincome* to differ with *collegegrad*. That is, the effect of *hhincome* will need to be interpreted depending on if the observation has a college degree or not.
 
 \newpage
 
@@ -364,7 +397,7 @@ $$\text{ANSWER 24}$$
 
 ***
 
-$$\text{ANSWER 25}$$
+The interaction term in part (24) is statistically significant, this tells me that the relation between house value and household income depends on the degree status of a person. Is different for different bachelor degree status.
 
 \newpage
 
@@ -372,7 +405,8 @@ $$\text{ANSWER 25}$$
 
 ***
 
-$$\text{ANSWER 26}$$
+For college graduates (*collegegrad* == 1) the association between home value and household income is that for each additional dollar of household income there is an associated $1.6872341$ dollar increase in home value for collegegraduates in our sample on average. For non-college graduates (*collegegrad* ==1) the association between home value and household income is that for each additional dollar of household income there is an associated $1.189297$ dollar increase in home value for non-collegegraduates in our sample on average. 
+The stata regression output contains the results of hypothesis tests for each coefficient individually, and we can use the command `lincom hhincome + hhincomeXcollegegread` to test the hypothesis that these two are simultaneously significant. We find that in all cases the coefficients are significant and they are practically significant with their magnitudes.
 
 \newpage
 
@@ -380,7 +414,7 @@ $$\text{ANSWER 26}$$
 
 ***
 
-$$\text{ANSWER 27}$$
+$$valueh = \beta_0 hhincome + \beta_1 hhincome^2 + \beta_2 costelec + \beta_3 collegegrad + u$$
 
 \newpage
 
@@ -396,7 +430,11 @@ $$\text{ANSWER 28}$$
 
 ***
 
-$$\text{ANSWER 29}$$
+If measurement error in valueh is correlated with any of explanatory covariates then we have bias.
+
+Yes *valueh* is reported with error. Many entries are of the midpoint of some range, i.e., we do not have exact home values rather the most reasonable estimate (midpoint) from some range of values recorded. If home values tend to be higher in the range or tend to be lower than its clear how using the midpoint of the range would not exactly work to represent the true home values. Measurement error in an outcome variable causes the estimates to be less precise.
+
+The measurement error will not bias the estimated coefficients as the error basically gets crammed into unobserved/unexplainable. The measurement error WILL cause the estimation to be less precise.
 
 \newpage
 
@@ -404,7 +442,7 @@ $$\text{ANSWER 29}$$
 
 ***
 
-$$\text{ANSWER 30}$$
+Yes, measurement error exists in costelec and hhincome. Costelec is clearly often recorded by taking some estimated monthly electric cost and factoring by twelve to get estimated annual electric cost, this leads to many values such as 600 (50*12) and 1200 (100*12). These annual electric cost values were clearly formed by taking some monthly value times 12 rather than by taking the annual cost itself directly. hhincome has often been rounded to trailing 0s. hhincome intends to display total household income but the survey respondents may have neglected to include some household member or left out some income, if thats the case then. educd seems most likely to be recorded accurately, with the primary matter being the accuracy of self-reports, which to my knowledge are quite fine for educational attainment. so collegegrad may be considered to not have measurement error. 
 
 \newpage
 
@@ -412,7 +450,7 @@ $$\text{ANSWER 30}$$
 
 ***
 
-$$\text{ANSWER 31}$$
+Yes some sample selection bias.
 
 \newpage
 
@@ -446,10 +484,15 @@ Note: in order to show your results concisely, use the outreg2 command.  Continu
 
 ***
 
-    gen missing_hhincome = (hhincome==.)
-    gen missing_costelec = (costelec==.)
-
-$$\text{ANSWER 32}$$
+    gen missing_costelec = (costelec == .)
+    gen missing_hhincome = (hhincome == .)
+    gen missing_valueh = (valueh == .)
+    reg missing_hhincome costelec collegegrad
+    outreg2 using missingdata, bdec(3) word excel replace 
+    reg missing_costelec hhincome collegegrad
+    outreg2 using missingdata, bdec(3) word excel append
+    
+![](question32.stataexam.PNG)
 
 \newpage
 
@@ -457,7 +500,7 @@ $$\text{ANSWER 32}$$
 
 ***
 
-$$\text{ANSWER 33}$$
+*valueh* has large groupings at those midpoint values I mentioned earlier. 
 
 \newpage
 
@@ -476,6 +519,12 @@ $$\text{ANSWER 34}$$
 $$\text{ANSWER 35}$$
 
 \newpage
+
+# Appendix containing regression analysis but weighted specification.
+
+\newpage
+
+# Relevant IPUMS Data Dictionary -----------
 
 Variable: "COSTELEC"
 
